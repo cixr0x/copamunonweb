@@ -1,23 +1,29 @@
 import logo from './logo.svg';
 import './App.css';
+import "bootswatch/dist/lux/bootstrap.min.css";
+import Header from './Header';
+import Calendar from './calendar/Calendar';
+import Standings from './standings/Standings';
+import Drivers from './drivers/Drivers';
+import Gallery from './gallery/Gallery';
+import Rules from './rules/Rules';
+import React from 'react';
+import { Routes, Route, Link } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      
+      <Routes>
+        <Route path="/" element={<Calendar />} />
+        <Route path="/home" element={<Calendar />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/drivers" element={<Drivers />} />
+        <Route path="/standings" element={<Standings />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/rules" element={<Rules />} />
+      </Routes>
+      
     </div>
   );
 }

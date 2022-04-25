@@ -1,5 +1,6 @@
 .App {
-  text-align: center;
+  /*text-align: center;*/
+  font-family: "F1";
 }
 
 .App-logo {
@@ -35,4 +36,44 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.calendar-cards-container {
+  margin: 50px;
+}
+
+.driver-table-constructor-image {
+  height:  50px !important; 
+  width: 50px !important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover !important;
+  border-radius: 8px;
+}
+
+.driver-table-constructor-splitter {
+  display: contents;
+  height: 30px;
+  width: 5px;
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.driver-flag {
+  height: 46px;
+  width: 68px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid #949498;
+  border-radius: 6px;
+}
+
+.driver-media-icon {
+  height:50px;
+  width: 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
 }
