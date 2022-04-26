@@ -18,9 +18,9 @@ function Card(props) {
                         </div>
                     </div>
                     <div className="col-4">
-                    <div className="trackimage" style={
+                        <div className="trackimage" style={
                             {
-                                "width": "80px","height": "46px",
+                                "width": "80px", "height": "46px",
                                 "backgroundImage": `url('${props.flag}')`,
                                 "backgroundRepeat": "no-repeat",
                                 "backgroundPosition": "center",
@@ -47,6 +47,21 @@ function Card(props) {
                                 "backgroundPosition": "center",
                                 "backgroundSize": "contain"
                             }}>
+                        </div>
+                    </div>
+                </div>
+                <div className="row ">
+                    <div className='col-2' style={{"width":"35px"}}>
+                        <div className='rounded-image' style={
+                            { "backgroundImage": `url('${props.winner.profileimg}')`, "width":"30px", "height":"30px"}}>
+                        </div>
+                    </div>
+                    <div className='col-8'>
+                        {props.winner.name != "" ? props.winner.name : ""}
+                    </div>
+                    <div className='col-2' style={{"width":"35px"}}>
+                        <div className='rounded-image' style={
+                            { "backgroundImage": `url('${props.winner.constructorpic}')`, "width":"45px", "height":"45px"}}>
                         </div>
                     </div>
                 </div>

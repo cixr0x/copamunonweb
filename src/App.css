@@ -124,4 +124,9 @@
 }
 
 
-
+.rounded-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover !important;
+  border-radius: 8px;
+}
