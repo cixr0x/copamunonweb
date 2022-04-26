@@ -38,18 +38,82 @@
   }
 }
 
-.calendar-cards-container {
-  margin: 50px;
+@media only screen and (min-width: 600px) {
+  .calendar-cards-container {
+  
+    margin: 50px;
+  }
+
+  .driver-flag {
+    height: 46px;
+    width: 68px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid #949498;
+    border-radius: 6px;
+  }
+
+  .driver-table-constructor-image {
+    height:  50px !important; 
+    width: 50px !important;
+  }
+  .driver-media-icon {
+    height:50px;
+    width: 50px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  
+  }
+
+  .hide-big {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .calendar-cards-container {
+  
+    margin: 5px;
+  }
+  .hide-small {
+    display: none !important;
+  }
+  .table td, .table th {
+     padding: 0px !important; 
+  }
+  .driver-table-constructor-image {
+    height:  35px !important; 
+    width: 35px  !important;
+  }
+  .driver-flag {
+    height: 23px;
+    width: 34px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid #949498;
+    border-radius: 6px;
+  }
+
+  .driver-media-icon {
+    height:25px;
+    width: 25px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  
+  }
 }
 
 .driver-table-constructor-image {
-  height:  50px !important; 
-  width: 50px !important;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover !important;
   border-radius: 8px;
 }
+
 
 .driver-table-constructor-splitter {
   display: contents;
@@ -59,21 +123,5 @@
   margin-right: 15px;
 }
 
-.driver-flag {
-  height: 46px;
-  width: 68px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border: 1px solid #949498;
-  border-radius: 6px;
-}
 
-.driver-media-icon {
-  height:50px;
-  width: 50px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
 
-}

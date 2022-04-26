@@ -6,7 +6,7 @@ function DriverStandingRow(props) {
             <th scope="row">{props.rank}</th>
             <td>
             <div className='row align-items-center'>
-                    <div className='col-xs-2 col-sm-2  driver-table-constructor-image' style={
+                    <div className='col-xs-2 col-sm-2  driver-table-constructor-image hide-small' style={
                         { "backgroundImage": `url('${props.driverImage}')` }}></div><div className='col-xs-10 col-sm-10'>{props.driverName}</div>
                 </div>
                 </td>
@@ -14,7 +14,7 @@ function DriverStandingRow(props) {
                 <div className='row align-items-center'>
                 <div className='col-xs-2 col-sm-2 driver-table-constructor-image' style={
                         { "backgroundImage": `url('${props.constructorLogo}')` }}></div>
-                        <div className='col-xs-10 col-sm-10'>
+                        <div className='col-xs-10 col-sm-10 hide-small'>
                         <div className='driver-table-constructor-splitter'
                             style={{ "backgroundColor": `${props.constructorColor}` }}>
                         </div>

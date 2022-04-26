@@ -65,9 +65,9 @@ function Drivers() {
             <table className="table">
                 <thead>
                     <tr>
-                        <th scope="col"></th>
+                        <th scope="col" className='hide-small'></th>
                         <th scope="col">Piloto</th>
-                        <th scope="col">Escudería</th>
+                        <th scope="col"><span className='hide-small'>Escudería</span><span className='hide-big'>Esc</span></th>
                         <th scope="col">Medios</th>
                     </tr>
                 </thead>
@@ -84,15 +84,15 @@ function Drivers() {
 function DriverRow(props) {
     return (
         <tr>
-            <td>
-                <div className="driver-flag" style={
+            <td className='hide-small'>
+                <div className="driver-flag hide-small" style={
                     { "backgroundImage": `url('${props.flag}')` }}>
 
                 </div>
             </td>
             <td>
-                <div className='row align-items-center'>
-                    <div className='col-xs-2 col-sm-2  driver-table-constructor-image' style={
+                <div className='row align-items-center' style={{"--bs-gutter-x": "0px", "flex-wrap":"nowrap"}}>
+                    <div className='col-xs-2 col-sm-2  driver-table-constructor-image ' style={
                         { "backgroundImage": `url('${props.driverImage}')` }}></div><div className='col-xs-10 col-sm-10'>{props.driverName}</div>
                 </div>
             </td>
@@ -100,7 +100,7 @@ function DriverRow(props) {
                 <div className='row align-items-center'>
                     <div className='col-xs-2 col-sm-2 driver-table-constructor-image' style={
                         { "backgroundImage": `url('${props.constructorLogo}')` }}></div>
-                        <div className='col-xs-10 col-sm-10'>
+                        <div className='col-xs-10 col-sm-10 hide-small'>
                         <div className='driver-table-constructor-splitter'
                             style={{ "backgroundColor": `${props.constructorColor}` }}>
                         </div>
