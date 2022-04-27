@@ -44,7 +44,7 @@ function Calendar(props) {
 
     let cards = null;
 
-    if (calendar && eventResults && drivers) {
+    if (calendar && eventResults && drivers && constructors) {
         cards = calendar.map((calendarItem) => {
             return (
             <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
@@ -71,14 +71,20 @@ function Calendar(props) {
             let constructor = constructors.find((constructor)=> {
                 return constructor.code === driver.constructor;
             });
+            // console.log("constructor", constructor, winner);
             let score = Number(results[gp]);
             if (score > topscore)  {
                 topscore = score;
-                winner = driver;
-                winner.constructorpic = constructor.logo;
+                winner = {
+                    driverName: driver.name,
+                    driverPic: driver.profileimg, 
+                    constructorLogo: constructor.logo, 
+                    constructorColor: constructor.color
+                }
+
             }
         }
-        // console.log("winner", gp, winner);
+        console.log("winner", constructor, winner);
         return winner;
     }
 
