@@ -78,8 +78,8 @@ function Calendar(props) {
                 winner = {
                     driverName: driver.name,
                     driverPic: driver.profileimg, 
-                    constructorLogo: constructor.logo, 
-                    constructorColor: constructor.color
+                    constructorLogo: constructor?.logo, 
+                    constructorColor: constructor?.color
                 }
 
             }
