@@ -9,7 +9,7 @@ function Calendar(props) {
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
     useEffect(() => {
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/calendar?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/events?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
         .then(res => res.json())
         .then((data) => {
           console.log(utils.transformGoogleSheetValues(data.values));
