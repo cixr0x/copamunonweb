@@ -8,12 +8,14 @@ function Standings() {
     const [eventResults, setEventResults] = useState(null);
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
+    const [penalties, setPenalties] = useState(null);
+    const [reserve, setReserve] = useState(null);
     useEffect(() => {
 
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/event_results?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                console.log(utils.transformGoogleSheetValues(data.values));
+                // console.log(utils.transformGoogleSheetValues(data.values));
                 setEventResults(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
@@ -21,7 +23,7 @@ function Standings() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                console.log(utils.transformGoogleSheetValues(data.values));
+                // console.log(utils.transformGoogleSheetValues(data.values));
                 setDrivers(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
@@ -29,8 +31,24 @@ function Standings() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                console.log(utils.transformGoogleSheetValues(data.values));
+                // console.log(utils.transformGoogleSheetValues(data.values));
                 setConstructors(utils.transformGoogleSheetValues(data.values));
+            })
+            .catch(console.log)
+
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/penalties?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+            .then(res => res.json())
+            .then((data) => {
+                //console.log(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
+                setPenalties(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
+            })
+            .catch(console.log)
+
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/reserve?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+            .then(res => res.json())
+            .then((data) => {
+                console.log(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
+                setReserve(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
             })
             .catch(console.log)
 
@@ -39,9 +57,9 @@ function Standings() {
 
     let driversTable = [];
     let constructorsTable = [];
-    if (eventResults && drivers && constructors) {
+
+    let getDriverPoints = (eventResults) => {
         let points = {};
-        let constructorPoints = {};
         for (let results of eventResults) {
             let driver_code = results["driver_code"];
 
@@ -50,21 +68,44 @@ function Standings() {
                     continue;
                 }
                 // console.log("item", item, results[item]);
+
+                if (results[item] === "NA" || results[item] === "DNF") {
+                    continue;
+                }
                 if (points[driver_code]) {
                     points[driver_code] += results[item] ? Number(results[item]) : 0;
                 } else {
                     points[driver_code] = results[item] ? Number(results[item]) : 0;
                 }
+            
             }
         }
+        return points;
+    }
+
+    let getDriverPenalties = (driver) => {
+        return penalties[driver]["TOTAL"];
+    }
+
+    let getReserveConstructor = (driver, event) => {
+        return reserve[driver][event];
+    }
+
+    let getDriversTableData = (points) => {
         let driversTableData = [];
         for (let driverName in points) {
             let driver = drivers.find((driver) => {
                 return driver.code === driverName;
             })
             let tableObj = {};
+            let totalPoints =  points[driverName];
+            let penalties = Number(getDriverPenalties(driverName));
+            let deductedPoints = Math.floor(penalties / 7);
+            let finalPoints = totalPoints - deductedPoints;
             tableObj["driver"] = driver;
-            tableObj["points"] = points[driverName];
+            tableObj["totalPoints"] =totalPoints;
+            tableObj["deductedPoints"] =deductedPoints;
+            tableObj["finalPoints"] =finalPoints;
             tableObj["constructor"] = constructors.find((constructor) => {
                 return constructor.code === driver.constructor;
             });
@@ -72,24 +113,32 @@ function Standings() {
         }
         
         driversTableData = driversTableData.sort((a, b) => {
-            return b.points - a.points;
+            return b.finalPoints - a.finalPoints;
         });
 
+        return driversTableData;
+    }
+
+    let buildDriversTable = (driversTableData) => {
+        let constructorPoints = {};
         let rank = 1;
         for (let data of driversTableData) {
             // console.log(data);
+            let constructorCode = data?.constructor?.code;
 
-            if (constructorPoints[data?.constructor?.code]) {
-                constructorPoints[data?.constructor?.code] += data?.points ? Number(data?.points) : 0;
+            if (constructorPoints[constructorCode]) {
+                constructorPoints[constructorCode] += data?.finalPoints ;
             } else {
-                constructorPoints[data?.constructor?.code] = data?.points ? Number(data?.points) : 0;
+                constructorPoints[constructorCode] = data?.finalPoints;
             }
             driversTable.push(
                 <DriverStandingsRow
                     rank={rank}
                     driverName={data?.driver?.name}
                     constructorName={data?.constructor?.name}
-                    points={data?.points}
+                    totalPoints={data?.totalPoints}
+                    deductedPoints={data?.deductedPoints}
+                    finalPoints={data?.finalPoints}
                     constructorLogo={data?.constructor?.logo}
                     driverImage={data?.driver?.profileimg}
                     constructorColor = {data?.constructor?.color}
@@ -97,13 +146,19 @@ function Standings() {
             );
             rank++;
         }
+        return constructorPoints;
+    }
 
+    let getConstructorTableData = (constructorPoints) => {
         let constructorsTableData = []
-        
         for (let constructorName in constructorPoints) {
             let constructor = constructors.find((constructor) => {
                 return constructor.code === constructorName;
             })
+            
+            if (!constructorName) {
+                continue;
+            }
             let tableObj = {}
             tableObj["constructor"] = constructor;
             tableObj["points"] = constructorPoints[constructorName];
@@ -113,12 +168,16 @@ function Standings() {
         constructorsTableData = constructorsTableData.sort((a, b) => {
             return b.points - a.points;
         });
+        return constructorsTableData;
+    }
 
-        console.log("CONSTRUCTOR POINTS", constructorsTableData);   
-
-        rank = 1;
+    let buildConstuctorsTable = (constructorsTableData) => {
+        let rank = 1;
         for (let data of constructorsTableData) {
             // console.log(data);
+            if (!data?.constructor?.name) {
+                continue;
+            }
             constructorsTable.push(
                 <ConstructorStandingsRow
                     rank={rank}
@@ -130,6 +189,17 @@ function Standings() {
             );
             rank++;
         }
+    }
+
+    if (eventResults && drivers && constructors && penalties && reserve) {
+        
+        let points = getDriverPoints(eventResults);   
+        let driversTableData = getDriversTableData(points);
+        let constructorPoints = buildDriversTable(driversTableData);
+        let constructorsTableData = getConstructorTableData(constructorPoints);
+
+        buildConstuctorsTable(constructorsTableData);
+        // console.log("CONSTRUCTOR POINTS", constructorsTableData);           
     }
     return (
         <>

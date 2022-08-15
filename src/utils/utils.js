@@ -13,3 +13,16 @@ export const transformGoogleSheetValues = (data) => {
     }
     return result;
 }
+
+export const transformGoogleSheetValuesMap = (data, key) => {
+   
+    let result ={};
+    let transformed = transformGoogleSheetValues(data);
+    for (let row=0;row<transformed.length;row++) {
+        let keyVal= transformed[row][key];
+        
+        result[keyVal] =  transformed[row]; 
+        delete transformed[row][key];
+    }
+    return result;
+}

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 function DriverStandingRow(props) {
+    let points = () => {
+        if (props.deductedPoints===0) {
+            return <td>{props.finalPoints}</td>;
+        } else {
+            return <td>{props.finalPoints}  <span style={{"color":"#AAAAAA", "fontSize": "small"}}>({props.totalPoints} - {props.deductedPoints})</span></td>;
+        }
+    }
     return (
         <tr>
             <th scope="row">{props.rank}</th>
@@ -24,7 +31,7 @@ function DriverStandingRow(props) {
 
             </td>
 
-            <td>{props.points}</td>
+            {points()}
         </tr>
     );
 }
