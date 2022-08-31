@@ -1,6 +1,7 @@
 .App {
   /*text-align: center;*/
   font-family: "F1";
+  background-color: #F6F6F6;
 }
 
 .App-logo {
@@ -106,6 +107,34 @@
   }
 }
 a:link { text-decoration: none;  }
+
+.calendar-card-round {
+  color: #E70A28;
+  font-family: lato, sans-serif;
+  font-weight: 700;
+}
+
+.calendar-card-date {
+  font-family: 'Formula1Bold';
+  font-weight: 500;
+  color: black;
+  font-size: larger;
+}
+
+.calendar-card-country-name {
+  font-family: 'Formula1Bold';
+  font-weight: 500;
+  color: black;
+  font-size: large;
+}
+
+.calendar-card-circuit-name {
+  font-family: lato, sans-serif;
+  font-weight: 500;
+  color: black;
+  font-size: large;
+}
+
 .driver-media-link {
   text-decoration:none;
   color:var(--bs-body-color);

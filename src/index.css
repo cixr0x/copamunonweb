@@ -4,11 +4,21 @@
   src: url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Regular/Formula1-Regular.woff2) format("truetype");
 }
 
+@font-face {
+  font-family: "Formula1Regular";
+  src: url(/public/Formula1-Regular_web_0.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Formula1Bold";
+  src: url(/public/Formula1-Bold_web_0.ttf) format("truetype");
+}
 body {
   margin: 0;
   font-family: "F1";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+ 
 }
 
 code {

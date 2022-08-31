@@ -47,13 +47,14 @@ function Calendar(props) {
     if (calendar && eventResults && drivers && constructors) {
         cards = calendar.map((calendarItem) => {
             return (
-            <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+            <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 margin-bot">
             <Card
                 date={calendarItem.date_text}
                 country={calendarItem.country}
                 circuit={calendarItem.circuit}
                 track={calendarItem.track}
                 flag={calendarItem.flag}
+                round={calendarItem.round}
                 winner = {getGPwinner(calendarItem.code)}
             ></Card>
             </div>

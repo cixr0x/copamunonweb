@@ -3,42 +3,50 @@ import React from 'react';
 function Card(props) {
 
     return (
-        <div className="card" style={{"borderColor":props.winner.constructorColor, "borderWidth":"2px"}}>
+        <div className="card" style={{"border":"none", "borderRadius": "8px", "boxShadow": "2px 4px 7px 0px #0000000D", "minHeight":"322px"
+    }}>
             <div className="card-body">
-                <div className="row justify-content-between">
+                <div className="row g-0 justify-content-between">
                     <div className="col-8">
                         <div className="row ">
                             <div className="col-12">
-                                <h5 className="card-title">{props.country}</h5>
+                                <div className="calendar-card-round">{props.round}</div>
                             </div>
                         </div>
-                        <div className="row">
+                        <div className="row margin-bot">
                             <div className="col-12">
-                                <h4> <span className="badge bg-primary">{props.date}</span></h4>
+                                <div> <span className="calendar-card-date">{props.date}</span></div>
                             </div>
                         </div>
                     </div>
-                    <div className="col-4">
+                    <div className="col-4 ">
+                    <div className="row g-0 justify-content-end ">
                         <div className="trackimage" style={
                             {
-                                "width": "80px", "height": "46px",
+                                "width": "60px", "height": "32px",
                                 "backgroundImage": `url('${props.flag}')`,
                                 "backgroundRepeat": "no-repeat",
                                 "backgroundPosition": "center",
-                                "backgroundSize": "contain",
+                                "backgroundSize": "cover",
                                 "border": "1px solid #949498",
                                 "borderRadius": "6px"
                             }}>
+                                </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="row">
+                <div className="row g-0">
                     <div className="col-12">
-                        <p className="card-text">{props.circuit}</p>
+                        <div className="calendar-card-country-name">{props.country}</div>
                     </div>
                 </div>
-                <div className="row ">
+                <div className="row g-0">
+                    <div className="col-12">
+                        <div className="calendar-card-circuit-name">{props.circuit}</div>
+                    </div>
+                </div>
+                <div className="row g-0 ">
                     <div className="col-12">
                         <div className="trackimage" style={
                             {
@@ -51,7 +59,7 @@ function Card(props) {
                         </div>
                     </div>
                 </div>
-                <div className="row ">
+                <div className="row g-0">
                     <div className='col-2' style={{"width":"35px"}}>
                         <div className='rounded-image' style={
                             { "backgroundImage": `url('${props.winner.driverPic}')`, "width":"30px", "height":"30px"}}>
@@ -62,7 +70,7 @@ function Card(props) {
                     </div>
                     <div className='col-2' style={{"width":"35px"}}>
                         <div className='rounded-image' style={
-                            { "backgroundImage": `url('${props.winner.constructorLogo}')`, "width":"45px", "height":"45px"}}>
+                            { "backgroundImage": `url('${props.winner.constructorLogo}')`, "width":"30px", "height":"30px"}}>
                         </div>
                     </div>
                 </div>
