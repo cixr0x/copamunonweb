@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Card(props) {
-    console.log("props", JSON.stringify(props));
+
     return (
         <div className="card" style={{"borderColor":props.winner.constructorColor, "borderWidth":"2px"}}>
             <div className="card-body">
@@ -27,7 +27,7 @@ function Card(props) {
                                 "backgroundPosition": "center",
                                 "backgroundSize": "contain",
                                 "border": "1px solid #949498",
-                                "border-radius": "6px"
+                                "borderRadius": "6px"
                             }}>
                         </div>
                     </div>

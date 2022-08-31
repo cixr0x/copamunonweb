@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as utils from '../utils/utils';
 import Header from './../Header';
+import Card from './Card';
 
 function Drivers() {
     const [drivers, setDrivers] = useState(null);
@@ -25,6 +26,7 @@ function Drivers() {
     }, []);
     let table = [];
     let tableData = [];
+    let cards = null;
     if (drivers && constructors) {
         for (let driver of drivers) {
             let obj = {};
@@ -40,20 +42,21 @@ function Drivers() {
 
         for (let data of tableData) {
             table.push(
-                <DriverRow
+                <div className="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 margin-bot" >
+                <Card
                     flag={data.driver?.flag}
-                    driverImage={data.driver?.profileimg}
+                    driverImage={data.driver?.code}
                     driverName={data.driver?.name}
                     constructorLogo={data.constructor?.logo}
                     constructorName={data.constructor?.name}
                     twitch={data.driver?.twitch}
                     facebook={data.driver?.facebook}
                     constructorColor={data.constructor?.color}
-                ></DriverRow>
+                    ></Card>
+                    </div>
             )
         }
     }
-
 
     return (
         <>
@@ -61,20 +64,10 @@ function Drivers() {
             page="drivers"
         />
         <div className="calendar-cards-container">
-            <h1>Pilotos</h1>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col" className='hide-small'></th>
-                        <th scope="col">Piloto</th>
-                        <th scope="col"><span className='hide-small'>Escudería</span><span className='hide-big'>Esc</span></th>
-                        <th scope="col">Medios</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {table}
-                </tbody>
-            </table>
+            <h1>PILOTOS </h1>
+            <div className="row">                
+                {table}
+            </div>
         </div>
         </>
     )
@@ -93,7 +86,7 @@ function DriverRow(props) {
             <td>
                 <div className='row align-items-center' style={{"--bs-gutter-x": "0px", "flex-wrap":"nowrap"}}>
                     <div className='col-xs-2 col-sm-2  driver-table-constructor-image ' style={
-                        { "backgroundImage": `url('${props.driverImage}')` }}></div><div className='col-xs-10 col-sm-10'>{props.driverName}</div>
+                        { "backgroundImage": `url('driver_icon/${props.driverImage}.jpg'), url('driver_icon/${props.driverImage}.png')` }}></div><div className='col-xs-10 col-sm-10'>{props.driverName}</div>
                 </div>
             </td>
             <td>

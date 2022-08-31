@@ -69,7 +69,7 @@ function Standings() {
                 }
                 // console.log("item", item, results[item]);
 
-                if (results[item] === "NA" || results[item] === "DNF") {
+                if (isNaN(results[item])) {
                     continue;
                 }
                 if (points[driver_code]) {
@@ -140,7 +140,7 @@ function Standings() {
                     deductedPoints={data?.deductedPoints}
                     finalPoints={data?.finalPoints}
                     constructorLogo={data?.constructor?.logo}
-                    driverImage={data?.driver?.profileimg}
+                    driverImage={data?.driver?.code}
                     constructorColor = {data?.constructor?.color}
                 ></DriverStandingsRow>
             );

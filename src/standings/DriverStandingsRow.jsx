@@ -14,7 +14,7 @@ function DriverStandingRow(props) {
             <td>
             <div className='row align-items-center'>
                     <div className='col-xs-2 col-sm-2  driver-table-constructor-image hide-small' style={
-                        { "backgroundImage": `url('${props.driverImage}')` }}></div><div className='col-xs-10 col-sm-10'>{props.driverName}</div>
+                        { "backgroundImage": `url('driver_icon/${props.driverImage}.jpg'), url('driver_icon/${props.driverImage}.png')` }}></div><div className='col-xs-10 col-sm-10'>{props.driverName}</div>
                 </div>
                 </td>
             <td>
