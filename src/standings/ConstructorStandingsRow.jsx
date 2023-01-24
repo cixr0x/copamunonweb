@@ -5,12 +5,11 @@ function ConstructorStandingRow(props) {
         <tr>
             <th scope="row">{props.rank}</th>
             <td>
-                <div className='row align-items-center'>
-                    <div className='col-xs-2 col-sm-2 driver-table-constructor-image' style={
-                        { "backgroundImage": `url('${props.constructorLogo}')` }}>
-                    </div>
-                    <div className='col-xs-9 col-sm-9' style={{"width":"0px"}}>
-                        <div className='driver-table-constructor-splitter hide-small'
+            <div className='row align-items-center'>
+                <div className='col-xs-2 col-sm-2 driver-table-constructor-image' style={
+                        { "backgroundImage": `url('${props.constructorLogo}')` }}></div>
+                        <div className='col-xs-10 col-sm-10 hide-small'>
+                        <div className='driver-table-constructor-splitter'
                             style={{ "backgroundColor": `${props.constructorColor}` }}>
                         </div>
                         <div style={{"display":"inline-block"}}>{props.constructorName}</div>

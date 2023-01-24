@@ -12,7 +12,6 @@ function Calendar(props) {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/events?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
         .then(res => res.json())
         .then((data) => {
-          console.log(utils.transformGoogleSheetValues(data.values));
           setCalendar(utils.transformGoogleSheetValues(data.values));
         })
         .catch(console.log)
@@ -20,7 +19,6 @@ function Calendar(props) {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/event_results?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                console.log(utils.transformGoogleSheetValues(data.values));
                 setEventResults(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
@@ -28,7 +26,6 @@ function Calendar(props) {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                console.log(utils.transformGoogleSheetValues(data.values));
                 setDrivers(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
@@ -36,7 +33,6 @@ function Calendar(props) {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                console.log(utils.transformGoogleSheetValues(data.values));
                 setConstructors(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log);
@@ -72,7 +68,6 @@ function Calendar(props) {
             let constructor = constructors.find((constructor)=> {
                 return constructor.code === driver.constructor;
             });
-            // console.log("constructor", constructor, winner);
             let score = Number(results[gp]);
             if (score > topscore)  {
                 topscore = score;
@@ -85,7 +80,6 @@ function Calendar(props) {
 
             }
         }
-        console.log("winner", constructor, winner);
         return winner;
     }
 

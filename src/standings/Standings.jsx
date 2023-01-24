@@ -62,13 +62,13 @@ function Standings() {
         let points = {};
         for (let results of eventResults) {
             let driver_code = results["driver_code"];
-
             for (let item in results) {
                 if (item === "driver_code") {
                     continue;
                 }
-                // console.log("item", item, results[item]);
-
+                if (results[item]==="DNF") {
+                    results[item] = 0;
+                }
                 if (isNaN(results[item])) {
                     continue;
                 }
@@ -100,7 +100,7 @@ function Standings() {
             let tableObj = {};
             let totalPoints =  points[driverName];
             let penalties = Number(getDriverPenalties(driverName));
-            let deductedPoints = Math.floor(penalties / 7);
+            let deductedPoints = (Math.floor(penalties / 7))*2;
             let finalPoints = totalPoints - deductedPoints;
             tableObj["driver"] = driver;
             tableObj["totalPoints"] =totalPoints;
@@ -123,7 +123,6 @@ function Standings() {
         let constructorPoints = {};
         let rank = 1;
         for (let data of driversTableData) {
-            // console.log(data);
             let constructorCode = data?.constructor?.code;
 
             if (constructorPoints[constructorCode]) {
@@ -174,7 +173,6 @@ function Standings() {
     let buildConstuctorsTable = (constructorsTableData) => {
         let rank = 1;
         for (let data of constructorsTableData) {
-            // console.log(data);
             if (!data?.constructor?.name) {
                 continue;
             }
@@ -199,7 +197,6 @@ function Standings() {
         let constructorsTableData = getConstructorTableData(constructorPoints);
 
         buildConstuctorsTable(constructorsTableData);
-        // console.log("CONSTRUCTOR POINTS", constructorsTableData);           
     }
     return (
         <>

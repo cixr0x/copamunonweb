@@ -11,7 +11,6 @@ function Drivers() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                console.log(utils.transformGoogleSheetValues(data.values));
                 setDrivers(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log);
@@ -19,7 +18,6 @@ function Drivers() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                console.log(utils.transformGoogleSheetValues(data.values));
                 setConstructors(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log);
@@ -36,9 +34,6 @@ function Drivers() {
             });
             tableData.push(obj);
         }
-
-        console.log(tableData);
-
 
         for (let data of tableData) {
             table.push(
