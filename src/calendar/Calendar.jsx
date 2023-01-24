@@ -89,7 +89,7 @@ function Calendar(props) {
             page="calendar"
         />
         <div className="calendar-cards-container">
-            <h1>CALENDARIO COPA MUÑÓN 2022 </h1>
+            <h1>CALENDARIO COPA MUÑÓN 2023 </h1>
             <div className="row" style={{"--bs-gutter-y": "1.5rem;"}}>            
                 {cards}
             </div>
