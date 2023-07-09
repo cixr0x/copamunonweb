@@ -24,9 +24,6 @@ function Header(props) {
                 </a>
               </li>
               <li className="nav-item">
-                <a className={`nav-link ${props.page === "gallery" ? "active" : ""}`} href="gallery">GALERÍA</a>
-              </li>
-              <li className="nav-item">
                 <a className={`nav-link ${props.page === "rules" ? "active" : ""}`} href="rules">REGLAMENTO</a>
               </li>
             </ul>
