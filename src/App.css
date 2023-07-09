@@ -16,7 +16,8 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  /* background-color: #282c34;*/
+  background-color:#e71d45;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,6 +25,11 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+
+.header-color {
+  background-color:#e71d45;
 }
 
 .App-link {
@@ -155,8 +161,32 @@ a:link { text-decoration: none;  }
   background-size: contain !important;
 }
 
+.social-icon {
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  float: left;
+}
 
+.social-text {
+  float: left;
+  margin-left: 10px;
+  margin-top: 3px;
+}
 
+@media only screen and (max-width: 990px) {
+  .social-text {
+    display: none;
+  }
+}
+
+.social-media-links {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #dedede;
+}
 
 .driver-table-constructor-splitter {
   display: contents;
