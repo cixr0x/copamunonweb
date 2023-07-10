@@ -2,7 +2,7 @@ import React from 'react';
 
 function Card(props) {
     return (
-        <div className="card" style={{ "borderColor": props.constructorColor, "borderWidth": "2px" ,"minHeight":"295px" }}>
+        <div className="card" style={{ "borderColor": props.constructorColor, "borderWidth": "3px" ,"minHeight":"295px" }}>
             <div className="card-body" style={{ 'padding': '0.5rem', 'padding-top': '0.8rem' }}>
 
                 <div className="row g-0  justify-content-center margin-bot">
