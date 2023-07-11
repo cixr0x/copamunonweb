@@ -183,9 +183,9 @@ a:link { text-decoration: none;  }
 .social-media-links {
   padding-left: 10%;
   padding-right: 10%;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  background-color: #dedede;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #e7e7e7;
 }
 
 .driver-table-constructor-splitter {
