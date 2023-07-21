@@ -15,7 +15,8 @@ function Standings() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/event_results?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                // console.log(utils.transformGoogleSheetValues(data.values));
+                console.log("EVENTS");
+                console.log(utils.transformGoogleSheetValues(data.values));
                 setEventResults(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
@@ -23,7 +24,8 @@ function Standings() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                // console.log(utils.transformGoogleSheetValues(data.values));
+                console.log("DRIVERS");
+                console.log(utils.transformGoogleSheetValues(data.values));
                 setDrivers(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
@@ -31,7 +33,8 @@ function Standings() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                // console.log(utils.transformGoogleSheetValues(data.values));
+                console.log("CONSTRUCTORS");
+                console.log(utils.transformGoogleSheetValues(data.values));
                 setConstructors(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
@@ -39,7 +42,8 @@ function Standings() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/penalties?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
-                //console.log(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
+                console.log("PENALTIES");
+                console.log(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
                 setPenalties(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
             })
             .catch(console.log)
@@ -47,6 +51,7 @@ function Standings() {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/reserve?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
             .then(res => res.json())
             .then((data) => {
+                console.log("RESERVE");
                 console.log(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
                 setReserve(utils.transformGoogleSheetValuesMap(data.values, "driver_code"));
             })
@@ -84,6 +89,8 @@ function Standings() {
     }
 
     let getDriverPenalties = (driver) => {
+        console.log("GET PENALTIES "+driver);
+        console.log(penalties);
         return penalties[driver]["TOTAL"];
     }
 
@@ -100,7 +107,10 @@ function Standings() {
             let tableObj = {};
             let totalPoints =  points[driverName];
             let penalties = Number(getDriverPenalties(driverName));
-            let deductedPoints = (Math.floor(penalties / 7))*2;
+            console.log("PENALTIES");
+            console.log(penalties);
+            
+            let deductedPoints = (Math.floor(penalties / 10))*3;
             let finalPoints = totalPoints - deductedPoints;
             tableObj["driver"] = driver;
             tableObj["totalPoints"] =totalPoints;
