@@ -1,7 +1,13 @@
 import React from 'react';
-
+import { DEFAULT_LEAGUE } from './const';
 
 function Header(props) {
+  let league = props.league;
+  let pageLeague = ""
+  if (league) {
+    pageLeague = "pageLeague/";
+  }
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={{ "padding": "0px" }}>
@@ -13,7 +19,7 @@ function Header(props) {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className={`nav-link ${props.page === "calendar" ? "active" : ""}`} aria-current="page" href="calendar">CALENDARIO</a>
+                <a className={`nav-link ${props.page === "calendar" ? "active" : ""}`} aria-current="page" href={"calendar"}>CALENDARIO</a>
               </li>
               <li className="nav-item">
                 <a className={`nav-link ${props.page === "standings" ? "active" : ""}`} href="standings">RESULTADOS</a>

@@ -2,35 +2,44 @@ import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import * as utils from '../utils/utils';
 import Header from './../Header';
+import { DATASOURCE,CALENDAR_TITLE, DEFAULT_LEAGUE } from '../const';
+import { useParams } from 'react-router-dom';
 
 function Calendar(props) {
     const [calendar, setCalendar] = useState(null)
     const [eventResults, setEventResults] = useState(null);
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
+    let { league } = useParams();
+
+    if (!league) {
+        league = DEFAULT_LEAGUE;
+    }
+    let datasource = DATASOURCE[league];
+
     useEffect(() => {
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/events?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/events?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
         .then(res => res.json())
         .then((data) => {
           setCalendar(utils.transformGoogleSheetValues(data.values));
         })
         .catch(console.log)
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/event_results?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/event_results?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 setEventResults(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 setDrivers(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 setConstructors(utils.transformGoogleSheetValues(data.values));
@@ -87,9 +96,10 @@ function Calendar(props) {
         <>
         <Header
             page="calendar"
+            league={league}
         />
         <div className="calendar-cards-container">
-            <h1>CALENDARIO COPA MUÑÓN 2023 </h1>
+            <h1> { CALENDAR_TITLE[league]} </h1>
             <div className="row" style={{"--bs-gutter-y": "1.5rem;"}}>            
                 {cards}
             </div>

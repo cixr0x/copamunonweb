@@ -3,16 +3,25 @@ import * as utils from '../utils/utils';
 import DriverStandingsRow from './DriverStandingsRow';
 import ConstructorStandingsRow from './ConstructorStandingsRow';
 import Header from './../Header';
+import { DATASOURCE,DEFAULT_LEAGUE,POINTS_TO_PENALIZE, PENALTY_POINTS } from '../const';
+import { useParams } from 'react-router-dom';
 
-function Standings() {
+function Standings(props) {
     const [eventResults, setEventResults] = useState(null);
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
     const [penalties, setPenalties] = useState(null);
     const [reserve, setReserve] = useState(null);
+    let { league } = useParams();
+
+    if (!league) {
+        league = DEFAULT_LEAGUE;
+    }
+    let datasource = DATASOURCE[league]; 
+
     useEffect(() => {
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/event_results?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/event_results?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 console.log("EVENTS");
@@ -21,7 +30,7 @@ function Standings() {
             })
             .catch(console.log)
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 console.log("DRIVERS");
@@ -30,7 +39,7 @@ function Standings() {
             })
             .catch(console.log)
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 console.log("CONSTRUCTORS");
@@ -39,7 +48,7 @@ function Standings() {
             })
             .catch(console.log)
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/penalties?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/penalties?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 console.log("PENALTIES");
@@ -48,7 +57,7 @@ function Standings() {
             })
             .catch(console.log)
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/reserve?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/reserve?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 console.log("RESERVE");
@@ -110,7 +119,7 @@ function Standings() {
             console.log("PENALTIES");
             console.log(penalties);
             
-            let deductedPoints = (Math.floor(penalties / 10))*3;
+            let deductedPoints = (Math.floor(penalties / POINTS_TO_PENALIZE[league]))*PENALTY_POINTS[league];
             let finalPoints = totalPoints - deductedPoints;
             tableObj["driver"] = driver;
             tableObj["totalPoints"] =totalPoints;
@@ -211,6 +220,7 @@ function Standings() {
     return (
         <>
         <Header
+            league={league}
             page="standings"
         />
         <div className="calendar-cards-container">

@@ -61,6 +61,18 @@ function Card(props) {
                         </a>
                     </div>
                 </div>
+                <div className='row align-items-center justify-content-center margin-bot'>
+                    <div className="col-12">
+                        <a href={props.twitch} style={{ "display": props.twitch ? "block" : "none" }} target="_blank">
+                            <div className="row g-0">
+                                <div className=' col-2  driver-media-icon' style={
+                                    { "backgroundImage": `url('https://play-lh.googleusercontent.com/66czInHo_spTFWwLVYntxW8Fa_FHCDRPnd3y0HT14_xz6xb_lqSv005ARvdkJJE2TA=w240-h480-rw')` }}></div>
+                                <span className='col-10 driver-media-link'>{props.twitch?.replace("https://www.kick.com/", "kick/")}</span>
+                            </div>
+                            
+                        </a>
+                    </div>
+                </div>
 
                 <div className='row g-0 align-items-center margin-bot'>
                     <div className='col-2 driver-table-constructor-image' style={

@@ -2,20 +2,27 @@ import React, { useState, useEffect } from 'react';
 import * as utils from '../utils/utils';
 import Header from './../Header';
 import Card from './Card';
+import { DATASOURCE, DEFAULT_LEAGUE } from '../const';
+import { useParams } from 'react-router-dom';
 
-function Drivers() {
+function Drivers(props) {
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
+    let { league } = useParams();
+    if (!league) {
+        league = DEFAULT_LEAGUE;
+    }
+    let datasource = DATASOURCE[league];
     useEffect(() => {
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 setDrivers(utils.transformGoogleSheetValues(data.values));
             })
-            .catch(console.log);
+            .catch(console.log)
 
-        fetch("https://sheets.googleapis.com/v4/spreadsheets/1Z2jdOTuzcVNCGCfp3MyBkGixD9V94JJJGXHE0yoVSLM/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A")
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
                 setConstructors(utils.transformGoogleSheetValues(data.values));
@@ -57,6 +64,7 @@ function Drivers() {
         <>
         <Header
             page="drivers"
+            league={league}
         />
         <div className="calendar-cards-container">
             <h1>PILOTOS </h1>

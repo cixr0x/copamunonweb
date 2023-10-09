@@ -22,6 +22,13 @@ function App() {
         <Route path="/standings" element={<Standings />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/rules" element={<Rules />} />
+        <Route path="/:league" element={<Calendar />} />
+        <Route path="/:league/home" element={<Calendar />} />
+        <Route path="/:league/calendar" element={<Calendar />} />
+        <Route path="/:league/drivers" element={<Drivers />} />
+        <Route path="/:league/standings" element={<Standings />} />
+        <Route path="/:league/gallery" element={<Gallery />} />
+        <Route path="/:league/rules" element={<Rules />} />
       </Routes>
       
     </div>
