@@ -25,12 +25,15 @@ function Header(props) {
                 <a className={`nav-link ${props.page === "standings" ? "active" : ""}`} href="standings">RESULTADOS</a>
               </li>
               <li className="nav-item">
-                <a className={`nav-link ${props.page === "drivers" ? "active" : ""}`} href="drivers" >
-                  PILOTOS
-                </a>
+                <a className={`nav-link ${props.page === "drivers" ? "active" : ""}`} href="drivers">PILOTOS</a>
               </li>
               <li className="nav-item">
                 <a className={`nav-link ${props.page === "rules" ? "active" : ""}`} href="rules">REGLAMENTO</a>
+              </li>
+              <li className="nav-item">
+                <a className={`nav-link ${props.page === "sponsors" ? "active" : ""}`} href="sponsors" >
+                  PATROCINADORES
+                </a>
               </li>
             </ul>
           </div>

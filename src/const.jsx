@@ -6,7 +6,7 @@ export const DATASOURCE = {
 export const DEFAULT_LEAGUE = "munon";
 
 export const CALENDAR_TITLE = {
-    "munon": "CALENDARIO COPA MUÑÓN 2023", 
+    "munon": "CALENDARIO COPA MUÑÓN 2024", 
     "efe2": "CALENDARIO EFE2 INVIERNO 2023"
 };
 

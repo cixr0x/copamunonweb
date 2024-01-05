@@ -7,6 +7,7 @@ import Standings from './standings/Standings';
 import Drivers from './drivers/Drivers';
 import Gallery from './gallery/Gallery';
 import Rules from './rules/Rules';
+import Sponsors from './sponsors/Sponsors';
 import React from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 
@@ -19,9 +20,9 @@ function App() {
         <Route path="/home" element={<Calendar />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/drivers" element={<Drivers />} />
-        <Route path="/standings" element={<Standings />} />
-        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/standings" element={<Standings />} />        
         <Route path="/rules" element={<Rules />} />
+        <Route path="/sponsors" element={<Sponsors />} />
         <Route path="/:league" element={<Calendar />} />
         <Route path="/:league/home" element={<Calendar />} />
         <Route path="/:league/calendar" element={<Calendar />} />
