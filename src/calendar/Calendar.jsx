@@ -52,7 +52,7 @@ function Calendar(props) {
     if (calendar && eventResults && drivers && constructors) {
         cards = calendar.map((calendarItem) => {
             return (
-            <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 margin-bot">
+            <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 " style={{marginBottom: "16px"}}>
             <Card
                 date={calendarItem.date_text}
                 country={calendarItem.country}

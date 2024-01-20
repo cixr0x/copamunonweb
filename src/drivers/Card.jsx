@@ -1,38 +1,23 @@
 import React from 'react';
 
 function Card(props) {
+    
     return (
-        <div className="card" style={{ "borderColor": props.constructorColor, "borderWidth": "3px" ,"minHeight":"295px" }}>
+        <div className="card" style={{ "borderColor": props.constructorColor, "borderWidth": "0px" ,"minHeight":"295px" }}>
             <div className="card-body" style={{ 'padding': '0.5rem', 'padding-top': '0.8rem' }}>
 
                 <div className="row g-0  justify-content-center margin-bot">
-                    <div className='col-12 image  ' style={
+
+                    <div className='col-12 image  ' onClick={() => window.open(props.facebook != "" ? props.facebook : props.twitch != "" ? props.twitch : props.kick)} style={
                         {
                             "backgroundImage": `url('driver_icon/${props.driverImage}.jpg'), url('driver_icon/${props.driverImage}.png')`,
-                            "height": "100px", "width": "100px", "borderRadius": "24px"
+                            "height": "300px", "width": "240px", "borderRadius": "24px"
                         }}>
 
                     </div>
+                   
                 </div>
-                <div className="row g-0 justify-content-center ">
-                    <h5 className="card-title" style={{ "textAlign": "center" }}>{props.driverName}</h5>
-                </div>
-                <div className="row g-0 justify-content-center margin-bot">
-
-
-                    <div className="trackimage" style={
-                        {
-                            "width": "40px",
-                            "height": "32px",
-                            "backgroundImage": `url('${props.flag}')`,
-                            "backgroundRepeat": "no-repeat",
-                            "backgroundPosition": "center",
-                            "backgroundSize": "contain",
-                            "border": "1px solid #FFFFFF",
-                        }}>
-                    </div>
-
-                </div>
+                
                 <div className='row align-items-center justify-content-center margin-bot'>
                     <div className="col-12">
 
@@ -63,24 +48,16 @@ function Card(props) {
                 </div>
                 <div className='row align-items-center justify-content-center margin-bot'>
                     <div className="col-12">
-                        <a href={props.twitch} style={{ "display": props.twitch ? "block" : "none" }} target="_blank">
+                        <a href={props.kick} style={{ "display": props.kick ? "block" : "none" }} target="_blank">
                             <div className="row g-0">
                                 <div className=' col-2  driver-media-icon' style={
                                     { "backgroundImage": `url('https://play-lh.googleusercontent.com/66czInHo_spTFWwLVYntxW8Fa_FHCDRPnd3y0HT14_xz6xb_lqSv005ARvdkJJE2TA=w240-h480-rw')` }}></div>
-                                <span className='col-10 driver-media-link'>{props.twitch?.replace("https://www.kick.com/", "kick/")}</span>
+                                <span className='col-10 driver-media-link'>{props.kick?.replace("https://kick.com/", "kick/")}</span>
                             </div>
                             
                         </a>
                     </div>
                 </div>
-
-                <div className='row g-0 align-items-center margin-bot'>
-                    <div className='col-2 driver-table-constructor-image' style={
-                        { "backgroundImage": `url('${props.constructorLogo}')` }}></div>
-
-                    <div className='col-8' style={{ 'font-size': 'smaller' }}>{props.constructorName}</div>
-                </div>
-
 
             </div>
         </div>

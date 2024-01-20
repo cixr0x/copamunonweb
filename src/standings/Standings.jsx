@@ -3,7 +3,7 @@ import * as utils from '../utils/utils';
 import DriverStandingsRow from './DriverStandingsRow';
 import ConstructorStandingsRow from './ConstructorStandingsRow';
 import Header from './../Header';
-import { DATASOURCE,DEFAULT_LEAGUE,POINTS_TO_PENALIZE, PENALTY_POINTS } from '../const';
+import { DATASOURCE, DEFAULT_LEAGUE, POINTS_TO_PENALIZE, PENALTY_POINTS } from '../const';
 import { useParams } from 'react-router-dom';
 
 function Standings(props) {
@@ -17,7 +17,7 @@ function Standings(props) {
     if (!league) {
         league = DEFAULT_LEAGUE;
     }
-    let datasource = DATASOURCE[league]; 
+    let datasource = DATASOURCE[league];
 
     useEffect(() => {
 
@@ -80,7 +80,7 @@ function Standings(props) {
                 if (item === "driver_code") {
                     continue;
                 }
-                if (results[item]==="DNF") {
+                if (results[item] === "DNF") {
                     results[item] = 0;
                 }
                 if (isNaN(results[item])) {
@@ -91,14 +91,14 @@ function Standings(props) {
                 } else {
                     points[driver_code] = results[item] ? Number(results[item]) : 0;
                 }
-            
+
             }
         }
         return points;
     }
 
     let getDriverPenalties = (driver) => {
-        console.log("GET PENALTIES "+driver);
+        console.log("GET PENALTIES " + driver);
         console.log(penalties);
         return penalties[driver]["TOTAL"];
     }
@@ -114,23 +114,24 @@ function Standings(props) {
                 return driver.code === driverName;
             })
             let tableObj = {};
-            let totalPoints =  points[driverName];
+            let totalPoints = points[driverName];
             let penalties = Number(getDriverPenalties(driverName));
             console.log("PENALTIES");
             console.log(penalties);
-            
-            let deductedPoints = (Math.floor(penalties / POINTS_TO_PENALIZE[league]))*PENALTY_POINTS[league];
+
+            let deductedPoints = (Math.floor(penalties / POINTS_TO_PENALIZE[league])) * PENALTY_POINTS[league];
             let finalPoints = totalPoints - deductedPoints;
             tableObj["driver"] = driver;
-            tableObj["totalPoints"] =totalPoints;
-            tableObj["deductedPoints"] =deductedPoints;
-            tableObj["finalPoints"] =finalPoints;
+            tableObj["totalPoints"] = totalPoints;
+            tableObj["deductedPoints"] = deductedPoints;
+            tableObj["finalPoints"] = finalPoints;
+            tableObj["role"] = driver.role;
             tableObj["constructor"] = constructors.find((constructor) => {
                 return constructor.code === driver.constructor;
             });
             driversTableData.push(tableObj);
         }
-        
+
         driversTableData = driversTableData.sort((a, b) => {
             return b.finalPoints - a.finalPoints;
         });
@@ -145,24 +146,27 @@ function Standings(props) {
             let constructorCode = data?.constructor?.code;
 
             if (constructorPoints[constructorCode]) {
-                constructorPoints[constructorCode] += data?.finalPoints ;
+                constructorPoints[constructorCode] += data?.finalPoints;
             } else {
                 constructorPoints[constructorCode] = data?.finalPoints;
             }
-            driversTable.push(
-                <DriverStandingsRow
-                    rank={rank}
-                    driverName={data?.driver?.name}
-                    constructorName={data?.constructor?.name}
-                    totalPoints={data?.totalPoints}
-                    deductedPoints={data?.deductedPoints}
-                    finalPoints={data?.finalPoints}
-                    constructorLogo={data?.constructor?.logo}
-                    driverImage={data?.driver?.code}
-                    constructorColor = {data?.constructor?.color}
-                ></DriverStandingsRow>
-            );
-            rank++;
+            if (data?.driver?.role === "principal") {
+                driversTable.push(
+                    <DriverStandingsRow
+                        rank={rank}
+                        driverName={data?.driver?.name}
+                        constructorName={data?.constructor?.name}
+                        totalPoints={data?.totalPoints}
+                        deductedPoints={data?.deductedPoints}
+                        finalPoints={data?.finalPoints}
+                        constructorLogo={data?.constructor?.logo}
+                        driverImage={data?.driver?.code}
+                        constructorColor={data?.constructor?.color}
+                    ></DriverStandingsRow>
+                );
+                rank++;
+            }
+            
         }
         return constructorPoints;
     }
@@ -173,7 +177,7 @@ function Standings(props) {
             let constructor = constructors.find((constructor) => {
                 return constructor.code === constructorName;
             })
-            
+
             if (!constructorName) {
                 continue;
             }
@@ -201,7 +205,7 @@ function Standings(props) {
                     constructorName={data?.constructor?.name}
                     points={data?.points}
                     constructorLogo={data?.constructor?.logo}
-                    constructorColor = {data?.constructor?.color}
+                    constructorColor={data?.constructor?.color}
                 ></ConstructorStandingsRow>
             );
             rank++;
@@ -209,8 +213,8 @@ function Standings(props) {
     }
 
     if (eventResults && drivers && constructors && penalties && reserve) {
-        
-        let points = getDriverPoints(eventResults);   
+
+        let points = getDriverPoints(eventResults);
         let driversTableData = getDriversTableData(points);
         let constructorPoints = buildDriversTable(driversTableData);
         let constructorsTableData = getConstructorTableData(constructorPoints);
@@ -219,40 +223,40 @@ function Standings(props) {
     }
     return (
         <>
-        <Header
-            league={league}
-            page="standings"
-        />
-        <div className="calendar-cards-container">
-            <h1>Campeonato de Pilotos</h1>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Piloto</th>
-                        <th scope="col">Escudería</th>
-                        <th scope="col">Puntos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {driversTable}
-                </tbody>
-            </table>
-            <div style={{"marginTop":"100px"}}></div>
-            <h1>Campeonato de Constructores</h1>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Escudería</th>
-                        <th scope="col">Puntos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {constructorsTable}
-                </tbody>
-            </table>
-        </div>
+            <Header
+                league={league}
+                page="standings"
+            />
+            <div className="calendar-cards-container">
+                <h1>Campeonato de Pilotos</h1>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Piloto</th>
+                            <th scope="col">Escudería</th>
+                            <th scope="col">Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {driversTable}
+                    </tbody>
+                </table>
+                <div style={{ "marginTop": "100px" }}></div>
+                <h1>Campeonato de Constructores</h1>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Escudería</th>
+                            <th scope="col">Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {constructorsTable}
+                    </tbody>
+                </table>
+            </div>
         </>
     )
 }

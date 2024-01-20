@@ -8,8 +8,10 @@ import Drivers from './drivers/Drivers';
 import Gallery from './gallery/Gallery';
 import Rules from './rules/Rules';
 import Sponsors from './sponsors/Sponsors';
+import Driveroftheday from './driveroftheday/Driveroftheday';
 import React from 'react';
 import { Routes, Route, Link } from "react-router-dom";
+import Results from './driveroftheday/Results';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/standings" element={<Standings />} />        
         <Route path="/rules" element={<Rules />} />
         <Route path="/sponsors" element={<Sponsors />} />
+        <Route path="/pilotodeldia" element={<Driveroftheday />} />
+        <Route path="/dodd-results" element={<Results />} />
         <Route path="/:league" element={<Calendar />} />
         <Route path="/:league/home" element={<Calendar />} />
         <Route path="/:league/calendar" element={<Calendar />} />

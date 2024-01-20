@@ -211,3 +211,7 @@ a:link { text-decoration: none;  }
 .margin-top {
   margin-top: 8px;
 }
+
+.dodd-hover:hover {
+  box-shadow: #ffee00 0px 0px 20px 15px;
+}

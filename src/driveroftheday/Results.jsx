@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import * as utils from '../utils/utils';
-import Header from './../Header';
-import Card from './Card';
+import Header from '../Header';
+import Card from '../drivers/Card';
 import { DATASOURCE, DEFAULT_LEAGUE } from '../const';
 import { useParams } from 'react-router-dom';
+import { Bar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
 
-function Drivers(props) {
+function Results(props) {
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
     let { league } = useParams();
@@ -43,9 +53,8 @@ function Drivers(props) {
         }
 
         for (let data of tableData) {
-            if (data.driver?.role === "reserva") continue;
             table.push(
-                <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 margin-bot" >
+                <div className="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 margin-bot" >
                 <Card
                     flag={data.driver?.flag}
                     driverImage={data.driver?.code}
@@ -62,21 +71,67 @@ function Drivers(props) {
         }
     }
 
+
+    ChartJS.register(
+        CategoryScale,
+        LinearScale,
+        BarElement,
+        Title,
+        Tooltip,
+        Legend
+      );
+
+      
+    const options = {
+        indexAxis: 'y',
+        elements: {
+          bar: {
+            borderWidth: 2,
+          },
+        },
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+            position: 'right',
+          },
+          title: {
+            display: false
+          },
+        },
+      };
+      
+      const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+      
+      const data = {
+        labels,
+        datasets: [
+          {
+            label: 'Votos',
+            data: labels.map(() => Math.random()*150),
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          }
+        ],
+      };
+      
+
     return (
+        
         <>
-        <Header
+         <Header
             page="drivers"
             league={league}
         />
         <div className="calendar-cards-container">
-            <h1>PILOTOS </h1>
-            <div className="row">                
-                {table}
-            </div>
+            <h1>Piloto del día: Resultados </h1>
+            <Bar options={options} data={data} />
         </div>
+    
         </>
     )
 
 }
 
-export default Drivers;
+
+export default Results;

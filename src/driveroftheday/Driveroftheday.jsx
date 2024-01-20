@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import * as utils from '../utils/utils';
-import Header from './../Header';
+import Header from '../Header';
 import Card from './Card';
 import { DATASOURCE, DEFAULT_LEAGUE } from '../const';
 import { useParams } from 'react-router-dom';
+import { get } from '../utils/api';
 
 function Drivers(props) {
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
+    const [voted, setVoted] = useState(false);
+    const [votedDriver, setVotedDriver] = useState("");
     let { league } = useParams();
     if (!league) {
         league = DEFAULT_LEAGUE;
@@ -31,7 +34,13 @@ function Drivers(props) {
     }, []);
     let table = [];
     let tableData = [];
-    let cards = null;
+
+    const onDriverClick = (driver) => {
+        get(`votedriver/${driver}`);
+        setVoted(true);
+        setVotedDriver(driver);
+    }
+
     if (drivers && constructors) {
         for (let driver of drivers) {
             let obj = {};
@@ -43,37 +52,48 @@ function Drivers(props) {
         }
 
         for (let data of tableData) {
-            if (data.driver?.role === "reserva") continue;
             table.push(
-                <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 margin-bot" >
-                <Card
-                    flag={data.driver?.flag}
-                    driverImage={data.driver?.code}
-                    driverName={data.driver?.name}
-                    constructorLogo={data.constructor?.logo}
-                    constructorName={data.constructor?.name}
-                    twitch={data.driver?.twitch}
-                    facebook={data.driver?.facebook}
-                    kick={data.driver?.kick}
-                    constructorColor={data.constructor?.color}
+                <div className="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 margin-bot" >
+                    <Card
+                        flag={data.driver?.flag}
+                        driverImage={data.driver?.code}
+                        driverName={data.driver?.name}
+                        constructorLogo={data.constructor?.logo}
+                        constructorName={data.constructor?.name}
+                        constructorColor={data.constructor?.color}
+                        onclick={onDriverClick}
                     ></Card>
-                    </div>
+                </div>
             )
         }
     }
 
+
     return (
         <>
-        <Header
-            page="drivers"
-            league={league}
-        />
-        <div className="calendar-cards-container">
-            <h1>PILOTOS </h1>
-            <div className="row">                
-                {table}
+            <Header
+                page="drivers"
+                league={league}
+            />
+            <div className="calendar-cards-container">
+                {voted ? (
+                    <>
+                    <br/>
+                <h1 style={{"text-align":"center"}}>Has votado por {votedDriver} </h1>
+                <br/>
+                <h2 style={{"text-align":"center"}}>¡GRACIAS POR TU VOTO! </h2>
+                <br/>
+                </>
+                ) :
+                    (
+                        <>
+                            <h1 style={{"text-align":"center"}} >VOTA POR EL PILOTO DEL DÍA </h1>
+                            <div className="row">
+                                {table}
+                            </div>
+                        </>)}
+
             </div>
-        </div>
         </>
     )
 
