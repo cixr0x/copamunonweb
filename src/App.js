@@ -26,7 +26,7 @@ function App() {
         <Route path="/rules" element={<Rules />} />
         <Route path="/sponsors" element={<Sponsors />} />
         <Route path="/pilotodeldia" element={<Driveroftheday />} />
-        <Route path="/dodd-results" element={<Results />} />
+        <Route path="/dotd-results" element={<Results />} />
         <Route path="/:league" element={<Calendar />} />
         <Route path="/:league/home" element={<Calendar />} />
         <Route path="/:league/calendar" element={<Calendar />} />
