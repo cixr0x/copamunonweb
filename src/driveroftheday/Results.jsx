@@ -14,10 +14,16 @@ import {
     Tooltip,
     Legend,
   } from 'chart.js';
+import { get } from '../utils/api';
+import { tab } from '@testing-library/user-event/dist/tab';
 
+let interval=false;
 function Results(props) {
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
+    const [voteresults, setVoteResults] = useState({});
+    // const [tableData, setTableData] = useState(null);
+
     let { league } = useParams();
     if (!league) {
         league = DEFAULT_LEAGUE;
@@ -28,47 +34,65 @@ function Results(props) {
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
-                setDrivers(utils.transformGoogleSheetValues(data.values));
+                setDrivers(utils.transformGoogleSheetValuesMap(data.values, "code"));
             })
             .catch(console.log)
 
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/constructors?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
-                setConstructors(utils.transformGoogleSheetValues(data.values));
+                setConstructors(utils.transformGoogleSheetValuesMap(data.values, "code"));
             })
             .catch(console.log);
-    }, []);
-    let table = [];
-    let tableData = [];
-    let cards = null;
-    if (drivers && constructors) {
-        for (let driver of drivers) {
-            let obj = {};
-            obj["driver"] = driver;
-            obj["constructor"] = constructors.find((constructor) => {
-                return constructor.code === driver.constructor;
-            });
-            tableData.push(obj);
-        }
 
-        for (let data of tableData) {
-            table.push(
-                <div className="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 margin-bot" >
-                <Card
-                    flag={data.driver?.flag}
-                    driverImage={data.driver?.code}
-                    driverName={data.driver?.name}
-                    constructorLogo={data.constructor?.logo}
-                    constructorName={data.constructor?.name}
-                    twitch={data.driver?.twitch}
-                    facebook={data.driver?.facebook}
-                    kick={data.driver?.kick}
-                    constructorColor={data.constructor?.color}
-                    ></Card>
-                    </div>
-            )
+        getVoteResults();
+        console.log("USING EFFECT");
+
+        
+
+    }, []);
+
+    useEffect(() => {
+        if (interval === false) {
+            setInterval(() => {
+                getVoteResults();
+            }, 5000); 
+            interval = true;
         }
+        
+
+    }, []);
+
+    let getVoteResults = async () => {
+        get(`voteresults/`).then(votereusultsResponse => {
+            if (votereusultsResponse) {
+                let vrobj = {};
+                votereusultsResponse.forEach(element => {
+                    vrobj[element["driver_id"]] = element["count"];
+                });
+                setVoteResults(vrobj);
+            }
+        });
+    }
+
+    let tableData= null;
+    if (drivers && constructors && voteresults) {
+        const labels = Object.keys(voteresults);
+        console.log("drivers");
+        console.log(drivers);
+        console.log("constructors");
+        console.log(constructors);
+        tableData =  {
+            labels,
+            datasets: [
+              {
+                label: 'Votos',
+                data: labels.map((l) => voteresults[l]),
+                borderColor: labels.map(driver => constructors[drivers[driver].constructor].color),
+                backgroundColor: labels.map(driver => constructors[drivers[driver].constructor].color),
+              }
+            ],
+          };    
     }
 
 
@@ -101,19 +125,9 @@ function Results(props) {
         },
       };
       
-      const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
       
-      const data = {
-        labels,
-        datasets: [
-          {
-            label: 'Votos',
-            data: labels.map(() => Math.random()*150),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          }
-        ],
-      };
+
+      
       
 
     return (
@@ -125,7 +139,8 @@ function Results(props) {
         />
         <div className="calendar-cards-container">
             <h1>Piloto del día: Resultados </h1>
-            <Bar options={options} data={data} />
+            {tableData ? (<Bar options={options} data={tableData} />)  :""}
+            
         </div>
     
         </>
