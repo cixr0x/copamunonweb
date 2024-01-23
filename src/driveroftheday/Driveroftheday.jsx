@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 function Drivers(props) {
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
-    const [voted, setVoted] = useState( Cookies.get('voted') ?? false);
+    const [voted, setVoted] = useState( false);
     const [votedDriver, setVotedDriver] = useState(Cookies.get('voteddriver') ?? "");
     let { league } = useParams();
     if (!league) {
