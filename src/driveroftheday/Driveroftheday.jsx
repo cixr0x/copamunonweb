@@ -5,12 +5,13 @@ import Card from './Card';
 import { DATASOURCE, DEFAULT_LEAGUE } from '../const';
 import { useParams } from 'react-router-dom';
 import { get } from '../utils/api';
+import Cookies from 'js-cookie';
 
 function Drivers(props) {
     const [drivers, setDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
-    const [voted, setVoted] = useState(false);
-    const [votedDriver, setVotedDriver] = useState("");
+    const [voted, setVoted] = useState( Cookies.get('voted') ?? false);
+    const [votedDriver, setVotedDriver] = useState(Cookies.get('voteddriver') ?? "");
     let { league } = useParams();
     if (!league) {
         league = DEFAULT_LEAGUE;
@@ -32,11 +33,18 @@ function Drivers(props) {
             })
             .catch(console.log);
     }, []);
+
+    
+
     let table = [];
     let tableData = [];
 
-    const onDriverClick = (driver) => {
-        get(`votedriver/${driver}`);
+    const onDriverClick = async (driver) => {
+        let result = await get(`votedriver/${driver}`);
+        if (!result) return;
+        const inOneHour = new Date(new Date().getTime() + 60 * 60 * 1000); // Current time + 1 hour
+        Cookies.set('voted', true, { expires: inOneHour });
+        Cookies.set('voteddriver', driver, { expires: inOneHour });
         setVoted(true);
         setVotedDriver(driver);
     }

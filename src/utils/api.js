@@ -1,6 +1,6 @@
 
-const host = "http://copamunon.com:8080";
-//const host = "http://localhost:8080";
+//const host = "http://copamunon.com:8080";
+const host = "http://localhost:8080";
 
 export const get = async (endPoint, params) => {
     try {
@@ -18,7 +18,9 @@ export const get = async (endPoint, params) => {
             paramsString = "?" + paramsString;
         }
 
-        const response = await fetch(`${host}/api/${endPoint}${paramsString}`, { headers: { user: "test", sessionid: "96f1995b-e6f6-4bf6-b474-a7e4ea6d174e" } });
+        const response = await fetch(`${host}/api/${endPoint}${paramsString}`, { 
+            
+             });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
