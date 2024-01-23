@@ -1,6 +1,6 @@
 
-//const host = "http://copamunon.com:8080";
-const host = "http://localhost:8080";
+const host = "http://copamunon.com:8080";
+//const host = "http://localhost:8080";
 
 export const get = async (endPoint, params) => {
     try {
