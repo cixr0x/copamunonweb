@@ -10,9 +10,10 @@ function Card(props) {
 
                     <div className='col-12 image dodd-hover ' onClick={() => props.onclick(props.driverImage)} style={
                         {
-                            "backgroundImage": `url('driver_icon/${props.driverImage}.jpg'), url('driver_icon/${props.driverImage}.png')`,
-                            "height": "300px", "width": "240px", "borderRadius": "24px"
+                            "backgroundImage": `url('driver_icon/${props.driverImage}.jpg'), url('driver_icon/${props.driverImage}.png'), url('driver_icon/none.jpg')`,
+                            "height": "300px", "width": "240px", "borderRadius": "24px", "textAlign":"center"
                         }}>
+                        {props.driverRole !== "principal" ? "\n\n\n\n"+props.driverName:""}
 
                     </div>
                 </div>

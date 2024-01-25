@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 
 function Drivers(props) {
     const [drivers, setDrivers] = useState(null);
+    const [availableDrivers, setAvailableDrivers] = useState(null);
     const [constructors, setConstructors] = useState(null);
     const [voted, setVoted] = useState( Cookies.get('voted') ?? "");
     const [votedDriver, setVotedDriver] = useState(Cookies.get('voteddriver') ?? "");
@@ -22,7 +23,15 @@ function Drivers(props) {
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
             .then(res => res.json())
             .then((data) => {
-                setDrivers(utils.transformGoogleSheetValues(data.values));
+                setDrivers(utils.transformGoogleSheetValuesMap(data.values, "code"));
+            })
+            .catch(console.log)
+
+
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${datasource}/values/dotd_drivers?key=AIzaSyCle5ZUmaO3Skg_ClkzY9f9Q2760Rk442A`)
+            .then(res => res.json())
+            .then((data) => {
+                setAvailableDrivers(utils.transformGoogleSheetValues(data.values));
             })
             .catch(console.log)
 
@@ -49,18 +58,26 @@ function Drivers(props) {
         setVotedDriver(driver);
     }
 
-    if (drivers && constructors) {
-        for (let driver of drivers) {
+    if (drivers && availableDrivers && constructors) {
+        console.log("availableDrivers");
+        console.log(availableDrivers);
+        console.log("constructors");
+        console.log(constructors);
+        console.log("drivers");
+        console.log(drivers);
+        for (let driver of availableDrivers) {
+            if (!driver["driver_code"]) continue;
             let obj = {};
-            obj["driver"] = driver;
+            obj["driver"] = drivers[driver["driver_code"]];
             obj["constructor"] = constructors.find((constructor) => {
-                return constructor.code === driver.constructor;
+                return constructor.code === obj["driver"].constructor;
             });
             tableData.push(obj);
         }
-
+        console.log("tabledata");
+        console.log(tableData);
         for (let data of tableData) {
-            if (data.driver.role === "reserva") continue;
+            //if (data.driver.role === "reserva") continue;
             table.push(
                 <div className="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 margin-bot" >
                     <Card
@@ -70,6 +87,7 @@ function Drivers(props) {
                         constructorLogo={data.constructor?.logo}
                         constructorName={data.constructor?.name}
                         constructorColor={data.constructor?.color}
+                        driverRole={data.driver?.role}
                         onclick={onDriverClick}
                     ></Card>
                 </div>

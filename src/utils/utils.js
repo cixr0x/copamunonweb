@@ -22,7 +22,7 @@ export const transformGoogleSheetValuesMap = (data, key) => {
         let keyVal= transformed[row][key];
         
         result[keyVal] =  transformed[row]; 
-        delete transformed[row][key];
+        //delete transformed[row][key];
     }
     return result;
 }
