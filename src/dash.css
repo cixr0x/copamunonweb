@@ -1,0 +1,83 @@
+
+.image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain !important;
+}
+
+.track-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+.lap-counter {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+.material-symbols-outlined-light {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 200,
+  'GRAD' 0,
+  'opsz' 24
+}
+.weather-chart-container {
+  position: relative;
+  width: 20rem;
+  height: 5.5rem;
+}
+
+.weather-chart-title-icon {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-icon {
+  font-size: 3rem;
+}
+
+.table th, .table td {
+  padding-top: 0.4rem ;
+  padding-bottom: 0.4rem ;
+  padding-left: 0.4rem ;
+  padding-right: 0.4rem ;
+}
+
+
+.table-damage th, .table-damage td {
+  padding-top: 0.1rem ;
+  padding-bottom: 0.1rem ;
+  padding-left: 0.3rem ;
+  padding-right: 0.3rem ;
+}
+.table-damage {
+  width: 100%;
+}
+.session-flag {
+  width: 100%;
+  color: black;
+  background-color: yellow;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  padding: 0.3rem;
+}
+
+.session-table {
+  font-weight: 600;
+}

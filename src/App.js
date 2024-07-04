@@ -12,6 +12,7 @@ import Driveroftheday from './driveroftheday/Driveroftheday';
 import React from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 import Results from './driveroftheday/Results';
+import Dashboard from './dashboard/Dashbaord';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/pilotodeldia" element={<Driveroftheday />} />
         <Route path="/vote" element={<Driveroftheday />} />
         <Route path="/dotd-results" element={<Results />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/:league" element={<Calendar />} />
         <Route path="/:league/home" element={<Calendar />} />
         <Route path="/:league/calendar" element={<Calendar />} />

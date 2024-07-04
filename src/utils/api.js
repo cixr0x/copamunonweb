@@ -1,6 +1,6 @@
 
 const host = "";
-//const host = "https://localhost:8080";
+// const host = "http://localhost:8080";
 
 export const get = async (endPoint, params) => {
     try {

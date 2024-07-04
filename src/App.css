@@ -215,3 +215,10 @@ a:link { text-decoration: none;  }
 .dodd-hover:hover {
   box-shadow: #ffee00 0px 0px 20px 15px;
 }
+
+.dash-body {
+  width: 100%;
+  min-height: 1050px;
+  background-color: #09090B;
+
+}
