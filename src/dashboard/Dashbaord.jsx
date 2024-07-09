@@ -1,13 +1,16 @@
 import Header from '../Header';
 import { useParams } from 'react-router-dom';
 import { get } from '../utils/api';
-import React, { useState, useEffect, useCallback  } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import * as utils from '../utils/utils';
 import { DATASOURCE, DEFAULT_LEAGUE } from '../const';
 import Cookies from 'js-cookie';
 import '../dash.css';
-import { weatherIcon, trackName, weatherName, safetyCarStatus, visualTyreCompoundName, ersDeployMode, resultStatus } from './dashboardConstants';
+import { weatherIcon, trackName, weatherName, safetyCarStatus, visualTyreCompoundName, ersDeployMode, resultStatus, tyreCompoundColor, teamName } from './dashboardConstants';
 import WeatherChart from './WeatherChart';
+import TyreChart from './TyreChart';
+import StintChart from './StintChart';
+import ProgressBar from './ProgressBar';
 
 let interval = false;
 
@@ -15,7 +18,7 @@ function Dashboard() {
     const [sessionData, setSessionData] = useState(null);
     const [playerData, setPlayerData] = useState(null);
     const [playerIdx, setPlayerIdx] = useState(0);
-   
+
     useEffect(() => {
         let isCancelled = false;
 
@@ -64,19 +67,46 @@ function Dashboard() {
     };
 
     let getPenaltyValue = (playerData) => {
-        if (playerData.resultStatus !== 2) { 
-            return resultStatus[playerData.resultStatus ];
-        }
-        if (playerData.numUnservedStopGoPens > 0) {
-            return "SG";
+        let penaltiesSecs = 0;
+        if (playerData.resultStatus !== 2) {
+            return resultStatus[playerData.resultStatus];
         }
         if (playerData.numUnservedDriveThroughPens > 0) {
             return "DT";
         }
-        if (playerData.penalties > 0) {
-            return `+${playerData.penalties}s`;
+        penaltiesSecs = playerData.numUnservedStopGoPens * 10;
+
+        if (playerData.penalties+penaltiesSecs > 0) {
+            return `+${penaltiesSecs+playerData.penalties}s`;
         }
         return "";
+    }
+
+    let getPlayerName = (playerData) => {
+        if (!playerData) return "";
+        if (playerData.name === "Player") {
+            return `${teamName[playerData.teamId]}_${playerData.raceNumber}`;
+        }
+        return playerData.name.substring(0, 12);
+    }
+
+    let getStintChartData = (playerData) => {
+        let stintHistory = playerData.m_tyreStintsHistoryData;
+        if (stintHistory.length === 0) return [];
+        let data = [];
+        let startLap = 0;
+        let lastLap = 0;
+
+        for (let i = 0; i < stintHistory.length - 1; i++) {
+            let endLap = stintHistory[i].m_endLap;
+            data.push({ startLap: startLap, endLap: endLap, color: tyreCompoundColor[stintHistory[i].m_tyreVisualCompound] });
+            startLap = endLap + 1;
+            lastLap = endLap;
+        }
+        console.log(stintHistory.length)
+        console.log(stintHistory[stintHistory.length - 1]);
+        data.push({ startLap: startLap, endLap: startLap + playerData.stintLaps, color: tyreCompoundColor[stintHistory[stintHistory.length - 1].m_tyreVisualCompound] });
+        return data
     }
 
     let sessionHeader = () => {
@@ -142,7 +172,7 @@ function Dashboard() {
                             </div>
                         </div>
                         <div className='col-3'>
-                            <WeatherChart data={sessionData?.weatherForecastSamples} sessionDuration={sessionData.sessionDuration ?? 0} />
+                            <WeatherChart data={sessionData?.weatherForecastSamples} sessionDuration={sessionData.sessionDuration/1000 ?? 0} />
                         </div>
 
                     </div>
@@ -165,14 +195,18 @@ function Dashboard() {
         return (
             <>
                 <div className='row'>
-                    <div className='col d-flex'><div style={{ "color": utils.getAdvColor(data.m_tyresWear[tyreIdx] / 100), "fontWeight": "bold" }}>{data.m_tyresWear[tyreIdx]}% </div> <div>(1.2/lap)</div></div>
+                    <div className='col d-flex justify-content-center align-items-center'>
+                        <div style={{ "width": "4em", "height": "4em" }}>
+                            <TyreChart damage={Math.round(data.m_tyresWear[tyreIdx])} />
+                        </div>
+                    </div>
                 </div>
                 <div className='row'>
                     <div className='col d-flex'><span class="material-symbols-outlined" style={{ "fontSize": "1.5rem" }}>radio_button_checked</span>{data.m_tyresInnerTemperature[tyreIdx]}°C</div>
                 </div>
                 <div className='row'>
                     <div className='col d-flex'><span class="material-symbols-outlined" style={{ "fontSize": "1.5rem" }}>circle</span>{data.m_tyresSurfaceTemperature[tyreIdx]}°C</div>
-                </div>                
+                </div>
                 <div className='row'>
                     <div className='col d-flex'><span class="material-symbols-outlined material-symbols-outlined-light" style={{ "fontSize": "1.5rem" }}>tire_repair</span>{data.m_tyresPressure[tyreIdx].toFixed(1)}psi</div>
                 </div>
@@ -193,7 +227,7 @@ function Dashboard() {
                         </div>
                     </div>
                     <div className='row'>
-                        <div className='col-3 ' style={{ "textAlign": "center" }}>
+                        <div className='col-4 ' style={{ "textAlign": "center" }}>
 
                             <div className='row '>
                                 <div className='col d-flex justify-content-center align-items-center'>
@@ -207,17 +241,31 @@ function Dashboard() {
                                 </div>
                             </div>
                             <div className='row'>
-                                <div>
-                                    8 Laps
-                                </div>
-                            </div>
-                            <div className='row'>
-                                <div style={{ "color": utils.getAdvColor(utils.getAverage(data.m_tyresWear) / 100), "fontWeight": "bold" }}>
+                                <div style={{ "color": utils.getAdvColor(utils.getAverage(data.m_tyresWear) / 100), "fontWeight": "bold", "fontSize": "1.2em" }}>
                                     {Math.round(utils.getAverage(data.m_tyresWear))}%
                                 </div>
                             </div>
+                            <div className='row'>
+                                <div>
+                                    {data.stintLaps} Laps
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <div>
+                                    {`${(utils.getAverage(data.m_tyresWear) / (data.stintLaps > 0 ? data.stintLaps : 1)).toFixed(1)}%/lap`}
+                                </div>
+                            </div>
+
+                            <div className='row'>
+                                <div>
+                                    Stops:  {data.pitStops}
+                                </div>
+                            </div>
+                            <div className='row'>
+                                {tyreSets(data)}
+                            </div>
                         </div>
-                        <div className='col-9 ' >
+                        <div className='col-8 ' >
                             <div className='row' style={{ "marginBottom": "1rem" }}>
                                 <div className='col-6'>
                                     {tyreDetails(data, 2)}
@@ -232,6 +280,13 @@ function Dashboard() {
                                 </div>
                                 <div className='col-6'>
                                     {tyreDetails(data, 1)}
+                                </div>
+                            </div>
+                            <div className='row'>
+                                Stints:
+                                <div style={{ "height": "4rem", "width": "100%" }}>
+                                    <StintChart data={getStintChartData(data)} maxValue={sessionData.totalLaps}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -254,30 +309,34 @@ function Dashboard() {
                         </div>
                     </div>
                     <div className='row'>
-                        <div className='col-12' >
-                            <table className="table-damage">
-                                <tbody >
-                                    <tr>
-                                        <td style={{ "textAlign": "right" }}>WingL:</td>
-                                        <td><div style={{ "color": utils.getAdvColor(data.m_frontLeftWingDamage/100), "fontWeight": "bold" }}>{data.m_frontLeftWingDamage}%</div></td>
-                                        <td style={{ "textAlign": "right" }}>WingR: </td>
-                                        <td><div style={{ "color": utils.getAdvColor(data.m_frontRightWingDamage/100), "fontWeight": "bold" }}>{data.m_frontRightWingDamage}%</div></td>
-                                    </tr>
-                                    <tr>
-                                        <td style={{ "textAlign": "right" }}>SideP:</td>
-                                        <td><div style={{ "color": utils.getAdvColor(data.m_sidepodDamage/100), "fontWeight": "bold" }}>{data.m_sidepodDamage}%</div></td>
-                                        <td style={{ "textAlign": "right" }}>Floor:</td>
-                                        <td><div style={{ "color": utils.getAdvColor(data.m_floorDamage/100), "fontWeight": "bold" }}>{data.m_floorDamage}%</div></td>
-                                    </tr>
-                                    <tr>
-                                        <td style={{ "textAlign": "right" }}>Diff:</td>
-                                        <td><div style={{ "color": utils.getAdvColor(data.m_diffuserDamage/100), "fontWeight": "bold" }}>{data.m_diffuserDamage}%</div></td>
-                                        <td style={{ "textAlign": "right" }}>RearW:</td>
-                                        <td><div style={{ "color": utils.getAdvColor(data.m_rearWingDamage/100), "fontWeight": "bold" }}>{data.m_rearWingDamage}%</div></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div className='col-12 image' style={{ "backgroundImage": ` url('dash/f1top.png')` }}>
+                            <div >
+                                <table className="table-damage" >
+                                    <tbody>
+                                        <tr>
+                                            <td style={{ "textAlign": "right" }}>LFWing:</td>
+                                            <td><div style={{ "color": utils.getAdvColor(data.m_frontLeftWingDamage / 100), "fontWeight": "bold" }}>{data.m_frontLeftWingDamage}%</div></td>
+                                            <td><div style={{ "color": utils.getAdvColor(data.m_frontRightWingDamage / 100), "textAlign": "right", "fontWeight": "bold" }}>{data.m_frontRightWingDamage}%</div></td>
+                                            <td style={{ "textAlign": "left" }}>RFWing: </td>
 
+                                        </tr>
+                                        <tr>
+                                            <td style={{ "textAlign": "right" }}>SidePod:</td>
+                                            <td><div style={{ "color": utils.getAdvColor(data.m_sidepodDamage / 100), "fontWeight": "bold" }}>{data.m_sidepodDamage}%</div></td>
+                                            <td><div style={{ "color": utils.getAdvColor(data.m_floorDamage / 100), "textAlign": "right", "fontWeight": "bold" }}>{data.m_floorDamage}%</div></td>
+                                            <td style={{ "textAlign": "left" }}>Floor:</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td style={{ "textAlign": "right" }}>Diffuser:</td>
+                                            <td><div style={{ "color": utils.getAdvColor(data.m_diffuserDamage / 100), "fontWeight": "bold" }}>{data.m_diffuserDamage}%</div></td>
+                                            <td><div style={{ "color": utils.getAdvColor(data.m_rearWingDamage / 100), "textAlign": "right", "fontWeight": "bold" }}>{data.m_rearWingDamage}%</div></td>
+                                            <td style={{ "textAlign": "left" }}>RWing:</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -299,7 +358,7 @@ function Dashboard() {
                     </div>
                     <div className='row'>
                         <div className='col-12' >
-                            <table className="table">
+                            <table className="table-damage">
                                 <tbody >
                                     <tr>
                                         <td style={{ "textAlign": "right", "fontSize": "1rem" }}><span class="material-symbols-outlined">local_gas_station</span></td>
@@ -308,6 +367,21 @@ function Dashboard() {
                                     <tr style={{}}>
                                         <td style={{ "color": "#FFFF00", "textAlign": "right", "fontSize": "1rem" }}><span class="material-symbols-outlined">bolt</span></td>
                                         <td style={{ "color": "#FFFF00", "textAlign": "left", "fontWeight": "bold" }} className='d-flex'><div>{`${((data.m_ersStoreEnergy) / 40000).toFixed(0)} %`}</div>&nbsp;<div>{`[${ersDeployMode[data.m_ersDeployMode]}]`}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <ProgressBar progress={data.m_ersStoreEnergy / 4000000 * 100} />
+                                        </td>
+                                    </tr>
+                                    <tr style={{}}>
+                                        <td style={{ "textAlign": "right", "fontSize": "1rem" }}>ABS:</td>
+                                        <td style={{ "textAlign": "left", "fontWeight": "bold" }} className='d-flex'><div>{`${data.m_antiLockBrakes === 1 ? "ON" : "OFF"}`}</div></td>
+                                    </tr>
+                                    <tr style={{}}>
+                                        <td style={{ "textAlign": "right", "fontSize": "1rem" }}>TC:</td>
+                                        <td style={{ "textAlign": "left", "fontWeight": "bold" }} className='d-flex'><div>{`${data.m_tractionControl === 1 ? "ON" : "OFF"}`}</div></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -334,6 +408,7 @@ function Dashboard() {
                                 <tbody >
                                     {data && data.m_lapHistoryData && data.m_lapHistoryData.map((lapdata, index) => (
                                         <tr key={index}>
+                                            <td>{index + 1}-</td>
                                             <td>{utils.formatTime(lapdata.m_lapTimeInMS)}</td>
                                         </tr>
                                     ))
@@ -363,8 +438,8 @@ function Dashboard() {
                             <table className="table table-damage" style={{ "textAlign": "center" }}>
                                 <tbody >
                                     {data && data.m_tyreSetData && data.m_tyreSetData.filter((setdata) => setdata.m_available === 1).map((setdata, index) => (
-                                        <tr key={index}>
-                                            <td><div className='image' style={
+                                        <tr key={index} className={setdata.m_fitted === 1 ? 'selected-tyre-set' : ''}>
+                                            <td ><div className='image' style={
                                                 {
                                                     "backgroundImage": ` url('dash/${visualTyreCompoundName[setdata.m_visualTyreCompound]}.svg')`,
                                                     "height": "1.2rem", "width": "1.2rem",
@@ -389,12 +464,10 @@ function Dashboard() {
         );
     }
 
-
-
     return (
         <>
-            <body data-bs-theme="dark" >
-                <div className="">
+            <body data-bs-theme="dark">
+                <div style={{ "paddingLeft": "1em", "paddingRight": "1em" }} >
                     <div className='session-header'>
 
                         {sessionHeader()}
@@ -406,16 +479,16 @@ function Dashboard() {
 
                     <div className='session-details'>
                         <div className='row'>
-                            <div className='col-6 col-md-6 col-sm-12'>
+                            <div className='col-lg-6 col-md-12 col-sm-12'>
 
                                 <table className="table table-hover table-striped session-table">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Name</th>
-                                            <th scope="col">Delta</th>
+                                            <th scope="col">Gap</th>
                                             <th scope="col">Tyre</th>
-                                            <th scope="col">Enrg</th>
+                                            <th scope="col">ERS</th>
                                             <th scope="col">Dmg</th>
                                             <th scope="col">Fastest</th>
                                             <th scope="col">Last</th>
@@ -426,8 +499,8 @@ function Dashboard() {
                                         {sessionData && sessionData.playerData ? sessionData.playerData.sort((a, b) => a.carPosition - b.carPosition).map((data, index) => (
                                             <tr key={index} onClick={() => { setPlayerIdx(data.playerCarIndex); console.log("Clicked row ", data.playerCarIndex) }}>
                                                 <th scope="row">{data.carPosition}</th>
-                                                <td>{data.name?.substring(0, 12)}</td>
-                                                <td>{utils.formatTime(data.delta)}</td>
+                                                <td>{getPlayerName(data)}</td>
+                                                <td style={{ "textAlign": "right" }}>+{utils.formatTimeNoNeg(data.delta)}</td>
                                                 <td>
                                                     <div style={{ "display": "flex" }}>
                                                         <div className='col-12 image' style={
@@ -452,7 +525,7 @@ function Dashboard() {
                                     </tbody>
                                 </table>
                             </div>
-                            <div className='col-6 col-md-6 col-sm-12'>
+                            <div className=' col-lg-6 col-md-12 col-sm-12'>
                                 <div className='row'>
                                     <div className='col-12'>
                                         {playerData?.m_name}
@@ -475,20 +548,17 @@ function Dashboard() {
                                         </div>
                                         <div className='row'>
                                             <div className='col-2'>
-                                                {tyreSets(playerData)}
+
                                             </div>
                                             <div className='col-6'>
-                                                { }
+
                                             </div>
                                         </div>
                                     </div>
                                     <div className='col-2'>
                                         {lapHistory(playerData)}
                                     </div>
-
-
                                 </div>
-
                             </div>
                         </div>
                     </div>

@@ -100,6 +100,14 @@ export const visualTyreCompoundName = {
     8: "wet"
 }
 
+export const tyreCompoundColor = {
+    16: "#FF0000",
+    17: "#FFFF00",
+    18: "#FFFFFF",
+    7: "#00FF00",
+    8: "#0000FF"
+}
+
 export const era = {
     0: "Modern",
     1: "Classic",
@@ -116,4 +124,17 @@ export const ersDeployMode = {
     1: "Medium",
     2: "Hotlap",
     3: "Overtake"
+}
+
+export const teamName = {
+    0: "Mercedes",
+    1: "Ferrari",
+    2: "RedBull",
+    3: "Williams",
+    4: "Aston Martin",
+    5: "Alpine",
+    6: "VCRB",
+    7: "Haas",
+    8: "McLaren",
+    9: "KickSauber",
 }

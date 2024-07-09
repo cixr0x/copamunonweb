@@ -10,6 +10,10 @@ const WeatherChart = ({ data, sessionDuration }) => {
     if (data == null) {
         return null;
     }
+    let sessionDurationMins = sessionDuration/60;
+    console.log("Session Duration");
+    console.log(sessionDurationMins);
+
     const chartData = {
         labels: data.map(item => item.m_timeOffset),
         datasets: [
@@ -23,6 +27,7 @@ const WeatherChart = ({ data, sessionDuration }) => {
         ],
     };
 
+    
     // Chart.js options
     const options = {
         responsive: true,
@@ -44,17 +49,6 @@ const WeatherChart = ({ data, sessionDuration }) => {
                     },
                 },
             },
-            annotation: {
-                annotations: {
-                  verticalLine: {
-                    type: 'line',
-                    xMin: Math.round(sessionDuration/60),
-                    xMax: Math.round(sessionDuration/60),
-                    borderColor: 'white',
-                    borderWidth: 1,
-                  }
-                }
-            }
         },
         scales: {
             x: {
@@ -76,6 +70,7 @@ const WeatherChart = ({ data, sessionDuration }) => {
     };
 
     return (
+        
         <div className="weather-chart-container"> {/* Apply the class here */}
             <Line data={chartData} options={options} />
         </div>

@@ -27,7 +27,25 @@ export const transformGoogleSheetValuesMap = (data, key) => {
     return result;
 }
 
-export function formatTime(milliseconds) {
+
+export function formatTimeNoNeg(pMilliseconds) {
+    let milliseconds = pMilliseconds;
+    if (milliseconds > 60000) milliseconds = 0;
+    const minutes = Math.floor(milliseconds / 60000);
+    const seconds = ((milliseconds % 60000) / 1000).toFixed(3);
+
+    // If minutes are 0, only display seconds
+    if (minutes === 0) {
+        return `${seconds.padStart(5, '0')}`;
+    }
+
+    // Display minutes and seconds
+    return `${String(minutes).padStart(2, '0')}:${seconds.padStart(6, '0')}`;
+}
+
+export function formatTime(pMilliseconds) {
+    let milliseconds = pMilliseconds;
+    //if (milliseconds > 60000) milliseconds = 0;
     const minutes = Math.floor(milliseconds / 60000);
     const seconds = ((milliseconds % 60000) / 1000).toFixed(3);
 
