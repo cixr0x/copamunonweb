@@ -8,7 +8,7 @@ function Card(props) {
 
                 <div className="row g-0  justify-content-center margin-bot">
 
-                    <div className='col-12 image dodd-hover ' onClick={() => props.onclick(props.driverImage)} style={
+                    <div className='col-12 image dodd-hover ' onClick={() => props.onclick(props.driverImage)} onTouchStart={() => props.onclick(props.driverImage)} style={
                         {
                             "backgroundImage": `url('driver_icon/${props.driverImage}.jpg'), url('driver_icon/${props.driverImage}.png'), url('driver_icon/none.jpg')`,
                             "height": "300px", "width": "240px", "borderRadius": "24px", "textAlign":"center"
