@@ -5,7 +5,9 @@ function Card(props) {
     return (
         <div className="card" style={{ "borderColor": props.constructorColor, "borderWidth": "0px" ,"minHeight":"295px" }}>
             <div className="card-body" style={{ 'padding': '0.5rem', 'padding-top': '0.8rem' }}>
-
+            <div className="row g-0  justify-content-center margin-bot" style={{"fontWeight":"bold"}}>
+                {props.driverName}
+            </div>
                 <div className="row g-0  justify-content-center margin-bot">
 
                     <div className='col-12 image  ' onClick={() => window.open(props.facebook != "" ? props.facebook : props.twitch != "" ? props.twitch : props.kick)} style={
