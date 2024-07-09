@@ -161,6 +161,13 @@ a:link { text-decoration: none;  }
   background-size: contain !important;
 }
 
+.touch-image {
+  touch-action: manipulation;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain !important;
+}
+
 .social-icon {
   border-radius: 6px;
   width: 32px;
