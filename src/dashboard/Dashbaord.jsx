@@ -76,18 +76,18 @@ function Dashboard() {
         }
         penaltiesSecs = playerData.numUnservedStopGoPens * 10;
 
-        if (playerData.penalties+penaltiesSecs > 0) {
-            return `+${penaltiesSecs+playerData.penalties}s`;
+        if (playerData.penalties + penaltiesSecs > 0) {
+            return `+${penaltiesSecs + playerData.penalties}s`;
         }
         return "";
     }
 
-    let getPlayerName = (playerData) => {
-        if (!playerData) return "";
-        if (playerData.name === "Player") {
-            return `${teamName[playerData.teamId]}_${playerData.raceNumber}`;
+    let getPlayerName = (name, teamId, raceNumber) => {
+        if (!name) return "";
+        if (name === "Player") {
+            return `${teamName[teamId]}_${raceNumber}`;
         }
-        return playerData.name.substring(0, 12);
+        return name.substring(0, 12);
     }
 
     let getStintChartData = (playerData) => {
@@ -114,7 +114,7 @@ function Dashboard() {
             <>
                 <div className='' style={{ "paddingTop": "20px" }}>
                     <div className='row'>
-                        <div className='col-4'>
+                        <div className='col-2'>
                             <div className='row'>
                                 <div className='track-title'>{trackName[sessionData?.trackId]}</div>
                             </div>
@@ -152,27 +152,38 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        <div className='col-1'>
+                        <div className='col-3'>
                             <div classsName='container' style={{ "textAlign": "center" }}>
                                 <div className='row justify-content-center'>
                                     <div className='col'>
                                         Forecast
                                     </div>
                                 </div>
-                                <div className='row '>
-                                    <div className='col '>
-                                        <span class="material-symbols-outlined material-symbols-outlined-light" style={{ "fontSize": "1.5rem" }}>rainy</span>
-                                    </div>
-                                </div>
-                                <div className='row'>
-                                    <div className='col'>
-                                        {sessionData?.weatherForecastSamples[0]?.m_rainPercentage}%
-                                    </div>
+                                <div className='row  row-nopad '>
+                                    {sessionData?.weatherForecastSamples?.map((sample) =>
+                                        <div className='col' >
+                                            <div className='row'>
+                                                <div className='col-1 ' >
+                                                    <span style={{ "fontSize": "0.8rem" }}>{sample.m_timeOffset ? sample.m_timeOffset + 'm' : 'Now'}</span>
+                                                </div>
+                                            </div>
+                                            <div className='row'>
+                                                <div className='col-1 '>
+                                                    <span class="material-symbols-outlined material-symbols-outlined-light" style={{ "fontSize": "2rem" }}>{weatherIcon[sample.m_weather]}</span>
+                                                </div>
+                                            </div>
+                                            <div className='row'>
+                                                <div className='col-1 d-flex'>
+                                                    <span class="material-symbols-outlined material-symbols-outlined-light" style={{ "fontSize": "1em" }}>rainy</span>{sample?.m_rainPercentage}%
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
                         <div className='col-3'>
-                            <WeatherChart data={sessionData?.weatherForecastSamples} sessionDuration={sessionData.sessionDuration/1000 ?? 0} />
+                            <WeatherChart data={sessionData?.weatherForecastSamples} sessionDuration={sessionData.sessionDuration / 1000 ?? 0} />
                         </div>
 
                     </div>
@@ -375,14 +386,6 @@ function Dashboard() {
                                             <ProgressBar progress={data.m_ersStoreEnergy / 4000000 * 100} />
                                         </td>
                                     </tr>
-                                    <tr style={{}}>
-                                        <td style={{ "textAlign": "right", "fontSize": "1rem" }}>ABS:</td>
-                                        <td style={{ "textAlign": "left", "fontWeight": "bold" }} className='d-flex'><div>{`${data.m_antiLockBrakes === 1 ? "ON" : "OFF"}`}</div></td>
-                                    </tr>
-                                    <tr style={{}}>
-                                        <td style={{ "textAlign": "right", "fontSize": "1rem" }}>TC:</td>
-                                        <td style={{ "textAlign": "left", "fontWeight": "bold" }} className='d-flex'><div>{`${data.m_tractionControl === 1 ? "ON" : "OFF"}`}</div></td>
-                                    </tr>
                                 </tbody>
                             </table>
 
@@ -499,7 +502,7 @@ function Dashboard() {
                                         {sessionData && sessionData.playerData ? sessionData.playerData.sort((a, b) => a.carPosition - b.carPosition).map((data, index) => (
                                             <tr key={index} onClick={() => { setPlayerIdx(data.playerCarIndex); console.log("Clicked row ", data.playerCarIndex) }}>
                                                 <th scope="row">{data.carPosition}</th>
-                                                <td>{getPlayerName(data)}</td>
+                                                <td>{getPlayerName(data.name, data.teamId, data.raceNumber)}</td>
                                                 <td style={{ "textAlign": "right" }}>+{utils.formatTimeNoNeg(data.delta)}</td>
                                                 <td>
                                                     <div style={{ "display": "flex" }}>
@@ -527,8 +530,8 @@ function Dashboard() {
                             </div>
                             <div className=' col-lg-6 col-md-12 col-sm-12'>
                                 <div className='row'>
-                                    <div className='col-12'>
-                                        {playerData?.m_name}
+                                    <div className='col-12' style={{ "fontSize": "2em", "fontWeight": "bold" }}>
+                                        {getPlayerName(playerData?.m_name, playerData?.m_teamId, playerData?.m_raceNumber)}
                                     </div>
                                 </div>
                                 <div className='row'>

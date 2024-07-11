@@ -10,6 +10,8 @@ const StintChart = ({ data, maxValue }) => {
     label: `Lap ${item.startLap}-${item.endLap}`,
     data: [item.endLap - item.startLap],
     backgroundColor: item.color,
+    borderColor: "#000000",
+    borderwidth: 1,
   }));
 
   const chartData = {

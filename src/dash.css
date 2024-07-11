@@ -91,6 +91,10 @@
   padding-bottom: 0.4rem;
 }
 
+.row-nopad row {
+  padding-bottom: 0.0rem;
+}
+
 .selected-tyre-set {
   border-style: solid;
   border-color: white;
