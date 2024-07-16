@@ -552,7 +552,7 @@ function Dashboard() {
                                         {getPlayerName(playerData?.m_name, playerData?.m_teamId, playerData?.m_raceNumber)+"  (P"+playerData?.m_carPosition+")"}
                                     </div>
                                     <div className='col-6'>
-                                       <div  style={{"height":"100%", "width":"100%", "backgroundColor":flagColor[playerData.m_vehicleFiaFlags] }}></div>
+                                       <div  style={{"height":"100%", "width":"100%", "backgroundColor":flagColor[playerData?.m_vehicleFiaFlags] }}></div>
                                     </div>
                                 </div>
                                 <div className='row'>
