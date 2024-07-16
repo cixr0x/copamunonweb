@@ -6,7 +6,7 @@ import * as utils from '../utils/utils';
 import { DATASOURCE, DEFAULT_LEAGUE } from '../const';
 import Cookies from 'js-cookie';
 import '../dash.css';
-import { weatherIcon, trackName, weatherName, safetyCarStatus, visualTyreCompoundName, ersDeployMode, resultStatus, tyreCompoundColor, teamName } from './dashboardConstants';
+import { weatherIcon, trackName, weatherName, safetyCarStatus, visualTyreCompoundName, ersDeployMode, resultStatus, tyreCompoundColor, teamName, teamCode, flagColor } from './dashboardConstants';
 import WeatherChart from './WeatherChart';
 import TyreChart from './TyreChart';
 import StintChart from './StintChart';
@@ -29,7 +29,7 @@ function Dashboard() {
             await getPlayerData();
 
             if (!isCancelled) {
-                setTimeout(fetchData, 1000);
+                setTimeout(fetchData, 500);
             }
         };
 
@@ -54,8 +54,8 @@ function Dashboard() {
 
     const getPlayerData = async () => {
         try {
-            console.log(`${playerIdx}`);
-            console.log(`f1dash/player/${playerIdx}`);
+            // console.log(`${playerIdx}`);
+            // console.log(`f1dash/player/${playerIdx}`);
             const playerDataResponse = await get(`f1dash/player/${playerIdx}`);
             if (playerDataResponse) {
                 setPlayerData(playerDataResponse);
@@ -68,8 +68,12 @@ function Dashboard() {
 
     let getPenaltyValue = (playerData) => {
         let penaltiesSecs = 0;
+        
         if (playerData.resultStatus !== 2) {
             return resultStatus[playerData.resultStatus];
+        }
+        if (playerData.pitStatus > 0) {
+            return "PIT";
         }
         if (playerData.numUnservedDriveThroughPens > 0) {
             return "DT";
@@ -87,7 +91,7 @@ function Dashboard() {
         if (name === "Player") {
             return `${teamName[teamId]}_${raceNumber}`;
         }
-        return name.substring(0, 12);
+        return name.substring(0, 14);
     }
 
     let getStintChartData = (playerData) => {
@@ -152,29 +156,29 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        <div className='col-3'>
+                        <div className='col-4'>
                             <div classsName='container' style={{ "textAlign": "center" }}>
                                 <div className='row justify-content-center'>
                                     <div className='col'>
                                         Forecast
                                     </div>
                                 </div>
-                                <div className='row  row-nopad '>
+                                <div className='row  row-nopad justify-content-center '>
                                     {sessionData?.weatherForecastSamples?.map((sample) =>
-                                        <div className='col' >
+                                        <div className='col-1' >
                                             <div className='row'>
-                                                <div className='col-1 ' >
+                                                <div className='col ' >
                                                     <span style={{ "fontSize": "0.8rem" }}>{sample.m_timeOffset ? sample.m_timeOffset + 'm' : 'Now'}</span>
                                                 </div>
                                             </div>
                                             <div className='row'>
-                                                <div className='col-1 '>
+                                                <div className='col'>
                                                     <span class="material-symbols-outlined material-symbols-outlined-light" style={{ "fontSize": "2rem" }}>{weatherIcon[sample.m_weather]}</span>
                                                 </div>
                                             </div>
                                             <div className='row'>
-                                                <div className='col-1 d-flex'>
-                                                    <span class="material-symbols-outlined material-symbols-outlined-light" style={{ "fontSize": "1em" }}>rainy</span>{sample?.m_rainPercentage}%
+                                                <div className='col'>
+                                                    <span class="material-symbols-outlined material-symbols-outlined-light" style={{ "fontSize": "1rem" }}>rainy</span>{sample?.m_rainPercentage}%
                                                 </div>
                                             </div>
                                         </div>
@@ -182,7 +186,7 @@ function Dashboard() {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-3'>
+                        <div className='col-2'>
                             <WeatherChart data={sessionData?.weatherForecastSamples} sessionDuration={sessionData.sessionDuration / 1000 ?? 0} />
                         </div>
 
@@ -207,7 +211,7 @@ function Dashboard() {
             <>
                 <div className='row'>
                     <div className='col d-flex justify-content-center align-items-center'>
-                        <div style={{ "width": "4em", "height": "4em" }}>
+                        <div style={{ "width": "4rem", "height": "4rem" }}>
                             <TyreChart damage={Math.round(data.m_tyresWear[tyreIdx])} />
                         </div>
                     </div>
@@ -252,18 +256,18 @@ function Dashboard() {
                                 </div>
                             </div>
                             <div className='row'>
-                                <div style={{ "color": utils.getAdvColor(utils.getAverage(data.m_tyresWear) / 100), "fontWeight": "bold", "fontSize": "1.2em" }}>
+                                <div style={{ "color": utils.getAdvColor(utils.getAverage(data.m_tyresWear) / 100), "fontWeight": "bold", "fontSize": "1.2rem" }}>
                                     {Math.round(utils.getAverage(data.m_tyresWear))}%
                                 </div>
                             </div>
                             <div className='row'>
                                 <div>
-                                    {data.stintLaps} Laps
+                                    {data.m_tyresAgeLaps} Laps
                                 </div>
                             </div>
                             <div className='row'>
                                 <div>
-                                    {`${(utils.getAverage(data.m_tyresWear) / (data.stintLaps > 0 ? data.stintLaps : 1)).toFixed(1)}%/lap`}
+                                    {`${(utils.getAverage(data.m_tyresWear) / (data.m_tyresAgeLaps > 0 ? data.m_tyresAgeLaps : 1)).toFixed(1)}%/lap`}
                                 </div>
                             </div>
 
@@ -412,7 +416,7 @@ function Dashboard() {
                                     {data && data.m_lapHistoryData && data.m_lapHistoryData.map((lapdata, index) => (
                                         <tr key={index}>
                                             <td>{index + 1}-</td>
-                                            <td>{utils.formatTime(lapdata.m_lapTimeInMS)}</td>
+                                            <td className={lapdata.m_lapTimeInMS === sessionData.fastestLap ? 'fastest-lap' : ''}>{utils.formatTime(lapdata.m_lapTimeInMS)}</td>
                                         </tr>
                                     ))
 
@@ -470,7 +474,7 @@ function Dashboard() {
     return (
         <>
             <body data-bs-theme="dark">
-                <div style={{ "paddingLeft": "1em", "paddingRight": "1em" }} >
+                <div style={{ "paddingLeft": "1rem", "paddingRight": "1rem" }} >
                     <div className='session-header'>
 
                         {sessionHeader()}
@@ -482,18 +486,21 @@ function Dashboard() {
 
                     <div className='session-details'>
                         <div className='row'>
-                            <div className='col-lg-6 col-md-12 col-sm-12'>
+                            <div className='col-xl-6 col-md-12 col-sm-12'>
 
                                 <table className="table table-hover table-striped session-table">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
+                                            <th scope="col"></th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Gap</th>
-                                            <th scope="col">Tyre</th>
-                                            <th scope="col">ERS</th>
+                                            <th scope="col">PIT</th>
+                                            <th scope="col">Tyre Age</th>
+                                            <th scope="col">DRS</th>
+                                            <th scope="col">ERS</th>                                            
                                             <th scope="col">Dmg</th>
-                                            <th scope="col">Fastest</th>
+                                            <th scope="col">Best</th>
                                             <th scope="col">Last</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -501,9 +508,15 @@ function Dashboard() {
                                     <tbody>
                                         {sessionData && sessionData.playerData ? sessionData.playerData.sort((a, b) => a.carPosition - b.carPosition).map((data, index) => (
                                             <tr key={index} onClick={() => { setPlayerIdx(data.playerCarIndex); console.log("Clicked row ", data.playerCarIndex) }}>
-                                                <th scope="row">{data.carPosition}</th>
+                                                <th scope="row"><div style={{"height":"100%", "minWidth":"1em", "backgroundColor":data.flags?flagColor[data.flags]:"transparent" }}>{data.carPosition}</div></th>
+                                                <td scope="row"><div className='image' style={
+                                                            {
+                                                                "backgroundImage": ` url('dash/teamicon_${teamCode[data.teamId]}.png')`,
+                                                                "height": "1.5rem", "width": "1.5rem"
+                                                            }}></div></td>
                                                 <td>{getPlayerName(data.name, data.teamId, data.raceNumber)}</td>
                                                 <td style={{ "textAlign": "right" }}>+{utils.formatTimeNoNeg(data.delta)}</td>
+                                                <td style={{ "textAlign": "right" }}>{data.pitStops}</td>
                                                 <td>
                                                     <div style={{ "display": "flex" }}>
                                                         <div className='col-12 image' style={
@@ -513,29 +526,37 @@ function Dashboard() {
                                                             }}>
 
                                                         </div>
+                                                        <div>
+                                                            &nbsp;{Math.round(data.tyreAgeLaps)}
+                                                        </div>
                                                         <div style={{ "color": utils.getAdvColor(data.tyresWear / 100) }}>
-                                                            {Math.round(data.tyresWear)}%
+                                                        &nbsp;{Math.round(data.tyresWear)}%
                                                         </div>
                                                     </div>
                                                 </td>
+                                                <td style={{ "textAlign": "left", "color": data.drs ? "#00FF00" : "#000000" }}>DRS</td>
                                                 <td style={{ "textAlign": "right", "color": "#FFFF00" }}>{Math.round(+data.ersStoreEnergy / 4000000 * 100)}%</td>
+                                                
                                                 <td style={{ "textAlign": "right", "color": utils.getAdvColor(data.damage / 100) }}>{Math.round(data.damage)}%</td>
-                                                <td>{utils.formatTime(data.bestLapTime)}</td>
-                                                <td>{utils.formatTime(data.lastLapTime)}</td>
+                                                <td className={data.bestLapTime === sessionData.fastestLap ? 'fastest-lap' : ''}>{utils.formatTime(data.bestLapTime)}</td>
+                                                <td className={data.lastLapTime === sessionData.fastestLap ? 'fastest-lap' : ''}>{utils.formatTime(data.lastLapTime)}</td>
                                                 <td>{getPenaltyValue(data)}</td>
                                             </tr>
                                         )) : null}
                                     </tbody>
                                 </table>
                             </div>
-                            <div className=' col-lg-6 col-md-12 col-sm-12'>
+                            <div className=' col-xl-6 col-md-12 col-sm-12'>
                                 <div className='row'>
-                                    <div className='col-12' style={{ "fontSize": "2em", "fontWeight": "bold" }}>
-                                        {getPlayerName(playerData?.m_name, playerData?.m_teamId, playerData?.m_raceNumber)}
+                                    <div className='col-6' style={{ "fontSize": "2rem", "fontWeight": "bold" }}>
+                                        {getPlayerName(playerData?.m_name, playerData?.m_teamId, playerData?.m_raceNumber)+"  (P"+playerData?.m_carPosition+")"}
+                                    </div>
+                                    <div className='col-6'>
+                                       <div  style={{"height":"100%", "width":"100%", "backgroundColor":flagColor[playerData.m_vehicleFiaFlags] }}></div>
                                     </div>
                                 </div>
                                 <div className='row'>
-                                    <div className='col-10'>
+                                    <div className='col-9'>
                                         <div className='row'>
                                             <div className='col-6'>
                                                 {tyreChart(playerData)}
@@ -558,7 +579,7 @@ function Dashboard() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='col-2'>
+                                    <div className='col-3'>
                                         {lapHistory(playerData)}
                                     </div>
                                 </div>

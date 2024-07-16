@@ -138,3 +138,23 @@ export const teamName = {
     8: "McLaren",
     9: "KickSauber",
 }
+
+export const teamCode = {
+    0: "mercedes",
+    1: "ferrari",
+    2: "redbull",
+    3: "williams",
+    4: "astonmartin",
+    5: "alpine",
+    6: "vcrb",
+    7: "haas",
+    8: "mclaren",
+    9: "sauber",
+}
+
+export const flagColor = {
+    0: "#1A1A1A",
+    1: "#00CC00",
+    2: "#0000FF",
+    3: "#FFFF00"
+}

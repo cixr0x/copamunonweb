@@ -7,8 +7,8 @@ Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 const StintChart = ({ data, maxValue }) => {
   // Transform the data into multiple datasets
   const datasets = data.map((item) => ({
-    label: `Lap ${item.startLap}-${item.endLap}`,
-    data: [item.endLap - item.startLap],
+    label: `Lap ${item.startLap+1}-${item.endLap+1}`,
+    data: [item.endLap+1 - item.startLap+1],
     backgroundColor: item.color,
     borderColor: "#000000",
     borderwidth: 1,

@@ -4,6 +4,56 @@
   background-size: contain !important;
 }
 
+@media (min-width: 400px) {
+  body {
+    font-size: 0.7rem;
+  }  
+}
+
+@media (min-width: 600px) {
+  body {
+    font-size: 0.8rem;
+  }  
+}
+
+@media (min-width: 800px) {
+  body {
+    font-size: 0.9rem;
+  }  
+}
+
+
+@media (min-width: 1000px) {
+  body {
+    font-size: 1rem;
+  }  
+}
+
+
+@media (min-width: 1200px) {
+  body {
+    font-size: 0.8rem;
+  }  
+}
+
+@media (min-width: 1400px) {
+  body {
+    font-size: 0.9rem;
+  }  
+}
+
+
+
+@media (min-width: 1600px) {
+  body {
+    font-size: 1rem;
+  }  
+}
+
+
+
+
+
 .track-title {
   font-size: 2rem;
   font-weight: 600;
@@ -34,7 +84,7 @@
 
 .weather-chart-container {
   position: relative;
-  width: 20rem;
+  /*width: 20rem;*/
   height: 5.5rem;
 }
 
@@ -56,10 +106,13 @@
 .table td {
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
-  padding-left: 0.4rem;
-  padding-right: 0.4rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
 }
 
+.table th{
+  font-size: 0.8rem;
+}
 
 .table-damage th,
 .table-damage td {
@@ -73,6 +126,13 @@
   width: 100%;
 }
 
+.fastest-lap {
+  color: rgb(196, 28, 205) !important;
+}
+
+.best-lap {
+  color: rgb(0, 240, 0) !important;
+}
 .session-flag {
   width: 100%;
   color: black;
